@@ -18,7 +18,6 @@ export default function Home() {
     <>
       <MuiThemeProvider theme={theme}>
         <SideBar />
-        <Typography variant='h1' gutterBottom>Teste🥰🥰🥰🥰🥰</Typography>
       </MuiThemeProvider>
     </>
   )

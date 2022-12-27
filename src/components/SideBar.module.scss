@@ -1,5 +1,12 @@
+.screenContainer {
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+    margin: 0;
+}
+
 .sidebarContainer {
-    position: relative;
+    position: fixed;
     display: flex;
     flex-direction: column;
     width: var(--sidebar-width);
@@ -8,6 +15,7 @@
     overflow: auto;
     left: 0;
     transition: 0.2s;
+    z-index: 10;
 
     .header {
         display: flex;
@@ -98,6 +106,22 @@
 
 }
 
-@media(max-width: 760px) {}
+.componentContainer {
+    display: flex;
+    margin-left: 2%;
+    width: 100%;
+    padding: 0;
+    justify-content: center;
+    align-items: center;
+}
 
-@media(max-width: 640px) {}
+@media(max-width: 640px) {
+    .componentContainer {
+        display: flex;
+        margin-left: 10%;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+    }
+
+}

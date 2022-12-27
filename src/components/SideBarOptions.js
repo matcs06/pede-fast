@@ -4,7 +4,7 @@ import { TbReportSearch } from "react-icons/tb"
 import { GoPackage } from "react-icons/go"
 import { MdDeliveryDining } from "react-icons/md"
 import { BiLinkAlt } from "react-icons/bi"
-
+import ProductList from "../pages/admin/ProductList/ProductList"
 
 export const sideBarOptions = [
 
@@ -12,7 +12,7 @@ export const sideBarOptions = [
    {
       title: "Meus Produtos",
       icon: <GrProductHunt size={25} />,
-      component: <div>Meus produtos</div>,
+      component: <ProductList />,
    },
    {
       title: "Adicionar Produtos",

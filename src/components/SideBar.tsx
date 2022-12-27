@@ -6,6 +6,7 @@ import { setSideBarWidth } from "./SideBarOptions"
 export default function SideBar({ children }: any) {
 
 	const [togleBar, setTogleBar] = useState(false)
+	const [renderedComponent, setRenderedComponent] = useState()
 
 	function handleClickTogle() {
 
@@ -23,8 +24,12 @@ export default function SideBar({ children }: any) {
 		}
 	}, [])
 
+	function onClickSideBarOption(component: any) {
+		setRenderedComponent(component)
+	}
+
 	return (
-		<>
+		<div className={styles.screenContainer}>
 			<div className={styles.sidebarContainer}>
 
 
@@ -38,17 +43,20 @@ export default function SideBar({ children }: any) {
 					<ul className="options">
 						{sideBarOptions.map((sidebaroption) => {
 							return (
-								<li key={sidebaroption.title}>
-									<div className={styles.optionIcons}>{sidebaroption.icon}</div>
+								<li key={sidebaroption.title} onClick={() => { onClickSideBarOption(sidebaroption.component) }}>
+									<div title={sidebaroption.title} className={styles.optionIcons}>{sidebaroption.icon}</div>
 									<p>{sidebaroption.title}</p>
 								</li>
 							)
 						})}
 					</ul>
 				</main>
-
-
 			</div>
-		</>
+			<div className={styles.componentContainer}>
+				{renderedComponent}
+			</div>
+		</div>
 	)
 }
+
+
