@@ -1,7 +1,7 @@
 export const productList = [
 
    {
-      title: "Mouss de chocolate",
+      title: "bolor de cenoura",
       quantity: "5",
       price: "12",
       image: "https://www.acasaencantada.com.br/wp-content/uploads/2021/07/Mousse-de-chocolate-zero-acucar.webp"
