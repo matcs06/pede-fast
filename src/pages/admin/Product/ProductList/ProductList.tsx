@@ -9,9 +9,6 @@ export default function ProductList() {
 
    function handleSerach(event: any) {
       event?.preventDefault()
-
-      console.log(event.target.value)
-
       setImputedValue(event.target.value)
    }
 

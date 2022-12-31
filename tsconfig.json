@@ -23,7 +23,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "src/components/SideBarOptions.js"
+    "src/components/SideBar/SideBarOptions.js"
   ],
   "exclude": [
     "node_modules"

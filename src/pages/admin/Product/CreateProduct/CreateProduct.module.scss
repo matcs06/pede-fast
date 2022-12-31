@@ -1,0 +1,51 @@
+.mainContainer {
+   display: flex;
+   flex-direction: column;
+   width: 100%;
+   align-items: center;
+   justify-content: center;
+}
+
+.headerContainer {
+   display: flex;
+   width: 100%;
+   margin: 5% 0 5% 0;
+   align-items: center;
+   justify-content: center;
+
+   header {
+      font-size: 20px;
+      color: var(--laranja-main);
+      font-weight: bold;
+   }
+}
+
+
+.inputContainer {
+   display: flex;
+   width: 70%;
+   flex-direction: column;
+
+   input {
+      margin-bottom: 10px;
+   }
+
+}
+
+.priceAndStockContainer {
+   display: flex;
+   flex-direction: row;
+   align-items: flex-start;
+   justify-content: space-evenly;
+
+   div {
+      justify-content: flex-start;
+
+      input[name="price"] {
+         margin-right: 20%;
+         justify-content: center;
+
+      }
+   }
+
+}

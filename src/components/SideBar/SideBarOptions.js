@@ -4,8 +4,8 @@ import { TbReportSearch } from "react-icons/tb"
 import { GoPackage } from "react-icons/go"
 import { MdDeliveryDining } from "react-icons/md"
 import { BiLinkAlt } from "react-icons/bi"
-import ProductList from "../pages/admin/ProductList/ProductList"
-
+import ProductList from "../../pages/admin/Product/ProductList/ProductList"
+import CreateProduct from "../../pages/admin/Product/CreateProduct/CreateProduct"
 export const sideBarOptions = [
 
 
@@ -17,7 +17,7 @@ export const sideBarOptions = [
    {
       title: "Adicionar Produtos",
       icon: <IoIosAddCircle size={25} />,
-      component: <div>adicionar </div>,
+      component: <CreateProduct />,
    },
    {
       title: "Pedidos em aberto",
@@ -45,7 +45,6 @@ export const sideBarOptions = [
 
 
 function setSideBarWidth(toggled) {
-   console.log(window.screen.width)
    if (window.screen.width <= 650) {
       if (toggled) {
          document.documentElement.style.setProperty('--sidebar-width', "230px");

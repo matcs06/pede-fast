@@ -1,6 +1,6 @@
 
 import { Inter } from '@next/font/google'
-import SideBar from '../components/SideBar'
+import SideBar from '../components/SideBar/SideBar'
 import { createTheme, responsiveFontSizes, ThemeProvider } from '@material-ui/core/styles'
 
 import { MuiThemeProvider, Typography } from '@material-ui/core'
