@@ -3,18 +3,23 @@ import Input from "../../../../components/Input/Input"
 import styles from "./CreateProduct.module.scss"
 import Button from "../../../../components/Button/Button"
 import Options from "./Options"
+import { MdCancel } from "react-icons/md"
 
-interface ProductOptions {
-   name: string,
-   optional: boolean,
-   maximum_quantity: number,
-   items: [
-      {
-         name: string,
-         value: string
-      }
-   ]
+interface OptionsItems {
+   name: string;
+   id: string;
+   value: string
 }
+
+interface createdOption {
+   id: string,
+   name: string,
+   isRequired: boolean,
+   maximumQuantity: string,
+   items: OptionsItems[]
+}
+
+type openedFromType = "new" | "existent"
 
 export default function CreateProduct() {
 
@@ -23,13 +28,59 @@ export default function CreateProduct() {
    const [productPrice, setProductPrice] = useState("")
    const [productStock, setProductStock] = useState("")
    const [showModal, setShowModal] = useState(false)
+   const [openedFrom, setOpenedFrom] = useState<openedFromType>("new")
 
-   const [producOptions, setProductOptions] = useState<ProductOptions>()
+   const [options, setOptions] = useState<createdOption[]>([]) /* all created options */
+
+   /* variables to store addtional values */
+   const [chosedOption, setChoosedOption] = useState<createdOption>();
+
 
    function handleClick() {
       console.log("clicado no botao")
    }
 
+   //FUNCAO QUE MOSTRA NOVA OPCAO NA TELA DE CRIACAO (CHAMADA COMO PROPS NO COMPONENTE Options)
+   function handleNewItem(newOption: createdOption) {
+      setOptions([...options, newOption]) /* adding a new option from additional panel */
+   }
+
+   //FUNCAO QUE ATUALIZA UMA OPCAO EXISTENTE NA TELA DE CRIACAO (CHAMADA COMO PROPS NO COMPONENTE Options)
+   function handleUpdateOption(updatedOption: createdOption) {
+      const updatedOptions = options.map((option) => {
+         if (option.id === updatedOption.id) {
+            return updatedOption
+         } else {
+            return option
+         }
+
+      })
+
+      setOptions(updatedOptions)
+   }
+
+   //FUNCAO PARA ABRIR PARA CRIAR UMA NOVA OPCAO
+   function addOption() {
+      setOpenedFrom("new")
+      setShowModal(!showModal)
+   }
+
+   //FUNCAO QUE ABRE UMA OPCAO EXISTENTE, PERMITINDO ATUALIZAR A OPCAO
+   function onClickAdditionals(id: string) {
+      //passando a opcao escolhida para o modal
+      const optionsChosed = options.filter((option) => option.id === id)
+
+      setChoosedOption(optionsChosed[0])
+      setOpenedFrom("existent")
+      setShowModal(true)
+
+   }
+
+   function handleDeleteOption(id: string) {
+      const optionsAfterDeleted = options.filter((option) => option.id != id)
+
+      setOptions(optionsAfterDeleted)
+   }
 
    return (
       <>
@@ -53,10 +104,15 @@ export default function CreateProduct() {
             </div>
 
             <div className={styles.options}>
-               <h4 onClick={() => setShowModal(!showModal)}>Opçoes e Adicionais</h4>
+               <h4 onClick={addOption}>Opçoes e Adicionais</h4>
                <ul>
-                  <li>Molho</li>
+                  {options.map((option) =>
+                     <div key={option.id} className={styles.newItemsContainer}>
+                        <li onClick={() => onClickAdditionals(option.id)}>{option.name}</li>
+                        <MdCancel className={styles.deleteItem} color="#DC6A6A" size={30} cursor="pointer" onClick={() => handleDeleteOption(option.id)} />
+                     </div>
 
+                  )}
                </ul>
             </div>
 
@@ -66,7 +122,13 @@ export default function CreateProduct() {
 
          </div>
          {showModal && (
-            < Options setShowModal={setShowModal} productName={productName} />
+            < Options createAdditional={handleNewItem}
+               updateOption={handleUpdateOption}
+               setShowModal={setShowModal}
+               productName={productName}
+               chosedOption={chosedOption}
+               openedFrom={openedFrom}
+            />
          )}
       </>
 

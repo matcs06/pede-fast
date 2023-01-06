@@ -13,16 +13,34 @@ interface OptionsItems {
    value: string
 }
 
+interface createdOption {
+   id: string,
+   name: string,
+   isRequired: boolean,
+   maximumQuantity: string,
+   items: OptionsItems[]
+}
+
 export default function Options({ ...props }) {
 
-   const [optionName, setOptionName] = useState("") /* Nome da opcao topo */
-   const [isOptaional, setIsOptional] = useState(true) /* Flag para salvar o is optional */
-   const [optionsItems, setOptionItems] = useState<OptionsItems[]>([]) /* Lista de itens */
+   let passedItems = []
+   let passedOptionIsRequited = null
+   let passedOptionName = ""
+
+   //Só assinala valor nos campos se for abrir uma opcao existente
+   if (props.openedFrom === "existent") {
+      passedItems = props.chosedOption.items != undefined ? props.chosedOption.items : []
+      passedOptionIsRequited = props.chosedOption.isRequired !== undefined ? props.chosedOption.isRequired : null;
+      passedOptionName = props.chosedOption.name !== undefined ? props.chosedOption.name : "";
+
+   }
+
+   const [optionName, setOptionName] = useState(passedOptionName) /* Nome da opcao topo */
+   const [isOptaional, setIsOptional] = useState(passedOptionIsRequited) /* Flag para salvar o is optional */
+   const [optionsItems, setOptionItems] = useState<OptionsItems[]>(passedItems) /* Lista de itens */
 
    const [item, setItem] = useState("") /* Salva o item */
    const [itemValue, setItemValue] = useState("") /* Salva o valor do item */
-
-   const [createOption, setCreateOption] = useState()
 
    function AdditemToOption() {
       const newOptionItem: OptionsItems = {
@@ -42,8 +60,23 @@ export default function Options({ ...props }) {
       setOptionItems(updatedItems)
    }
 
-   function handleCreate() {
+   function handleCreateUpdate() {
+      const modalOption: createdOption = {
+         id: props.openedFrom === "new" ? uuid() : props.chosedOption.id,
+         isRequired: false,
+         maximumQuantity: "10",
+         name: optionName,
+         items: optionsItems
+      }
 
+      if (props.openedFrom === "new") {
+         //funcao definida em CreateProuct para criar uma nova Opcao no estado
+         props.createAdditional(modalOption)
+      } else {
+         //funcao definida em CreateProduct para atualizar uma Opcao existente no estado
+         props.updateOption(modalOption)
+      }
+      props.setShowModal(false)
    }
 
    return (
@@ -52,28 +85,26 @@ export default function Options({ ...props }) {
             <MdCancel className={styles.closeWindow} color="#DC6A6A" size={30} onClick={() => props.setShowModal(false)} />
             <h3>{props.productName}</h3>
             <div className={styles.optionInfoContainer}>
-               <Input name="option" setFieldValue={setOptionName} placeholder="Nome da opção" />
+               <Input name="option" value={optionName} setFieldValue={setOptionName} placeholder="Nome da opção" />
             </div>
 
             <div className={styles.addItemContainer}>
                <h3>Adicione itens</h3>
-               <div className={styles.addItemInputContainer}>
+               <form onKeyDown={(event) => event.key === "Enter" && AdditemToOption()} action="submit" className={styles.addItemInputContainer}>
                   <Input name="item" setFieldValue={setItem} placeholder="Nome" value={item} />
                   <Input name="value" setFieldValue={setItemValue} placeholder="valor" type="number" value={itemValue} />
-                  <AiOutlinePlusCircle color="#DC6A6A" cursor="pointer" size={50} onClick={AdditemToOption} />
+                  <AiOutlinePlusCircle onClick={AdditemToOption} type='submit' color="#DC6A6A" cursor="pointer" size={50} />
 
-               </div>
+               </form>
                <div className={styles.options}>
                   <ul>
-                     {optionsItems.map((newItem) => {
+                     {optionsItems && optionsItems.map((newItem) => {
                         return (
                            <div key={newItem.id} className={styles.newItemsContainer}>
                               <li >{newItem.name}  </li>
                               {newItem.value && <p>R$ {newItem.value}</p>}
                               <MdCancel className={styles.deleteItem} color="#DC6A6A" size={30} cursor="pointer" onClick={() => removeItem(newItem.id)} />
                            </div>
-
-
                         )
                      })}
 
@@ -82,7 +113,7 @@ export default function Options({ ...props }) {
 
             </div>
             <div className={styles.buttonContainer}>
-               <Button handleClick={handleCreate}>Criar</Button>
+               <Button handleClick={handleCreateUpdate}>{props.openedFrom == "new" ? "Criar" : "Atualizar"}</Button>
             </div>
 
          </div>
