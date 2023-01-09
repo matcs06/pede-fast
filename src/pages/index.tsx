@@ -16,9 +16,7 @@ export default function Home() {
 
   return (
     <>
-      <MuiThemeProvider theme={theme}>
-        <SideBar />
-      </MuiThemeProvider>
+      <h1>PedeFast is running</h1>
     </>
   )
 }

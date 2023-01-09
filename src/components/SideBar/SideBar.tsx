@@ -3,10 +3,12 @@ import { sideBarOptions } from "./SideBarOptions"
 import { IoIosArrowDropleft } from "react-icons/io"
 import { useEffect, useState } from "react"
 import { setSideBarWidth } from "./SideBarOptions"
-export default function SideBar({ children }: any) {
+import { useRouter } from 'next/router'
 
+
+function SideBar({ children }: any) {
+	const router = useRouter()
 	const [togleBar, setTogleBar] = useState(false)
-	const [renderedComponent, setRenderedComponent] = useState()
 
 	function handleClickTogle() {
 
@@ -24,8 +26,12 @@ export default function SideBar({ children }: any) {
 		}
 	}, [])
 
-	function onClickSideBarOption(component: any) {
-		setRenderedComponent(component)
+	function onClickSideBarOption(event: any, componentPath: any) {
+		event.preventDefault()
+		router.push({
+			pathname: componentPath,
+		})
+
 	}
 
 	return (
@@ -43,7 +49,7 @@ export default function SideBar({ children }: any) {
 					<ul className="options">
 						{sideBarOptions.map((sidebaroption) => {
 							return (
-								<li key={sidebaroption.title} onClick={() => { onClickSideBarOption(sidebaroption.component) }}>
+								<li key={sidebaroption.title} onClick={() => { onClickSideBarOption(event, sidebaroption.componentPath) }}>
 									<div title={sidebaroption.title} className={styles.optionIcons}>{sidebaroption.icon}</div>
 									<p>{sidebaroption.title}</p>
 								</li>
@@ -52,11 +58,9 @@ export default function SideBar({ children }: any) {
 					</ul>
 				</main>
 			</div>
-			<div className={styles.componentContainer}>
-				{renderedComponent}
-			</div>
 		</div>
 	)
 }
 
 
+export default SideBar

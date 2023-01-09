@@ -11,7 +11,7 @@ interface OptionsItems {
    value: string
 }
 
-interface createdOption {
+interface CreatedOptionType {
    id: string,
    name: string,
    isRequired: boolean,
@@ -19,21 +19,50 @@ interface createdOption {
    items: OptionsItems[]
 }
 
+interface ProductType {
+   name: string,
+   description: string,
+   price: string,
+   quantity: string,
+   image_url: string,
+   options: CreatedOptionType[]
+   createOrUpdate: "create" | "update"
+
+}
+
 type openedFromType = "new" | "existent"
 
-export default function CreateProduct() {
+export default function CreateProduct(props: ProductType) {
 
-   const [productName, setProductName] = useState("")
-   const [productDescription, setProductDescription] = useState("")
-   const [productPrice, setProductPrice] = useState("")
-   const [productStock, setProductStock] = useState("")
+   /* Variable to assing default value when called by product create */
+   let productNameDefaultValue = ""
+   let productDescriptionDefaultValue = ""
+   let productPriceDefaultValue = ""
+   let productQuantityDefaultValue = ""
+   let productImageDefaultValue = ""
+   let productOptionsDefaultValue: CreatedOptionType[] = [];
+
+   if (props.createOrUpdate === "update") {
+      productNameDefaultValue = props.name
+      productDescriptionDefaultValue = props.description
+      productPriceDefaultValue = props.price
+      productQuantityDefaultValue = props.quantity
+      productImageDefaultValue = props.image_url
+      productOptionsDefaultValue = props.options
+
+   }
+
+   const [productName, setProductName] = useState(productNameDefaultValue)
+   const [productDescription, setProductDescription] = useState(productDescriptionDefaultValue)
+   const [productPrice, setProductPrice] = useState(productPriceDefaultValue)
+   const [productStock, setProductStock] = useState(productQuantityDefaultValue)
    const [showModal, setShowModal] = useState(false)
    const [openedFrom, setOpenedFrom] = useState<openedFromType>("new")
 
-   const [options, setOptions] = useState<createdOption[]>([]) /* all created options */
+   const [options, setOptions] = useState<CreatedOptionType[]>(productOptionsDefaultValue) /* all created options */
 
    /* variables to store addtional values */
-   const [chosedOption, setChoosedOption] = useState<createdOption>();
+   const [chosedOption, setChoosedOption] = useState<CreatedOptionType>();
 
 
    function handleClick() {
@@ -41,12 +70,12 @@ export default function CreateProduct() {
    }
 
    //FUNCAO QUE MOSTRA NOVA OPCAO NA TELA DE CRIACAO (CHAMADA COMO PROPS NO COMPONENTE Options)
-   function handleNewItem(newOption: createdOption) {
+   function handleNewItem(newOption: CreatedOptionType) {
       setOptions([...options, newOption]) /* adding a new option from additional panel */
    }
 
    //FUNCAO QUE ATUALIZA UMA OPCAO EXISTENTE NA TELA DE CRIACAO (CHAMADA COMO PROPS NO COMPONENTE Options)
-   function handleUpdateOption(updatedOption: createdOption) {
+   function handleUpdateOption(updatedOption: CreatedOptionType) {
       const updatedOptions = options.map((option) => {
          if (option.id === updatedOption.id) {
             return updatedOption
@@ -117,7 +146,7 @@ export default function CreateProduct() {
             </div>
 
             <div className={styles.buttonContainerparent}>
-               <Button handleClick={handleClick}>Adicionar Produto</Button>
+               <Button handleClick={handleClick}>{props.createOrUpdate === "update" ? "Atualizar produto" : "Criar Produto"}</Button>
             </div>
 
          </div>

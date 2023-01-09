@@ -2,6 +2,7 @@ import { productList } from "./Products"
 import styles from "./ProductList.module.scss"
 import Image from "next/image"
 import { useState } from "react"
+
 export default function ProductList() {
    const [inputedValue, setImputedValue] = useState("")
 
@@ -36,6 +37,7 @@ export default function ProductList() {
                )
             })}
          </main>
+
       </div>
    )
 }
