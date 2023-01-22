@@ -12,7 +12,6 @@ const roboto = Roboto({
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <main className={roboto.className}>
-      <SideBar />
       <Component {...pageProps} />
     </main>
   );

@@ -69,8 +69,8 @@ export default function CreateProduct(props: ProductType) {
       console.log("clicado no botao")
    }
 
-   //FUNCAO QUE MOSTRA NOVA OPCAO NA TELA DE CRIACAO (CHAMADA COMO PROPS NO COMPONENTE Options)
-   function handleNewItem(newOption: CreatedOptionType) {
+   //FUNCAO QUE MOSTRA NOVA OPTION NA TELA DE CRIACAO (CHAMADA COMO PROPS NO COMPONENTE Options)
+   function handleNewOption(newOption: CreatedOptionType) {
       setOptions([...options, newOption]) /* adding a new option from additional panel */
    }
 
@@ -88,13 +88,13 @@ export default function CreateProduct(props: ProductType) {
       setOptions(updatedOptions)
    }
 
-   //FUNCAO PARA ABRIR PARA CRIAR UMA NOVA OPCAO
+   //FUNCAO PARA ABRIR PARA CRIAR UMA NOVA OPTION
    function addOption() {
       setOpenedFrom("new")
       setShowModal(!showModal)
    }
 
-   //FUNCAO QUE ABRE UMA OPCAO EXISTENTE, PERMITINDO ATUALIZAR A OPCAO
+   //FUNCAO QUE ABRE UMA OPTION EXISTENTE, PERMITINDO ATUALIZAR A OPTION
    function onClickAdditionals(id: string) {
       //passando a opcao escolhida para o modal
       const optionsChosed = options.filter((option) => option.id === id)
@@ -105,6 +105,7 @@ export default function CreateProduct(props: ProductType) {
 
    }
 
+   //FUNCAO QUE DELETA UMA OPTION DA TELA DE PRODUTOS
    function handleDeleteOption(id: string) {
       const optionsAfterDeleted = options.filter((option) => option.id != id)
 
@@ -151,7 +152,7 @@ export default function CreateProduct(props: ProductType) {
 
          </div>
          {showModal && (
-            < Options createAdditional={handleNewItem}
+            < Options createAdditional={handleNewOption}
                updateOption={handleUpdateOption}
                setShowModal={setShowModal}
                productName={productName}

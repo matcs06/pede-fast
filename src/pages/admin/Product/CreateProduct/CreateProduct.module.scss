@@ -1,10 +1,13 @@
 .mainContainer {
+   position: relative;
    display: flex;
    flex-direction: column;
    width: 100%;
    align-items: center;
    justify-content: center;
-
+   max-width: 700px;
+   height: 100vh;
+   background-color: aliceblue;
 }
 
 .headerContainer {
@@ -152,9 +155,9 @@
 
 .buttonContainerparent {
    position: absolute;
-   bottom: 10px;
    width: 90%;
    display: flex;
    align-items: center;
    justify-content: center;
+   bottom: 2%;
 }
