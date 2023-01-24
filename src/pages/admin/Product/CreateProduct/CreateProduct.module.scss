@@ -4,7 +4,8 @@
    flex-direction: column;
    width: 100%;
    align-items: center;
-   justify-content: center;
+   justify-content: flex-start;
+   margin-top: 2%;
    max-width: 700px;
    height: 100vh;
    background-color: aliceblue;
@@ -39,14 +40,28 @@
 .priceAndStockContainer {
    display: flex;
    flex-direction: row;
-   align-items: flex-start;
-   justify-content: space-evenly;
+   align-items: center;
+   justify-content: center;
+   padding-left: 5%;
+
+   p {
+      color: rgb(99, 99, 99);
+   }
 
    div {
       justify-content: flex-start;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
       input[name="price"] {
-         margin-right: 20%;
+         max-width: 80px;
+         justify-content: center;
+
+      }
+
+      input[name="stock"] {
+         max-width: 80px;
          justify-content: center;
 
       }
@@ -114,7 +129,7 @@
 
       li {
          width: 75%;
-         background-color: #c1b8b8;
+         background-color: #d1d0d0;
          margin-top: 3%;
          line-height: 40px;
          display: flex;
@@ -127,7 +142,7 @@
          cursor: pointer;
 
          &:hover {
-            background-color: #adadad;
+            background-color: #282828;
          }
       }
 
@@ -147,6 +162,12 @@
             background-color: rgb(213, 211, 211);
             border-radius: 8px;
             cursor: pointer;
+            transition: 0.2s;
+            top: 25%;
+
+            &:hover {
+               background-color: #191919;
+            }
          }
       }
    }

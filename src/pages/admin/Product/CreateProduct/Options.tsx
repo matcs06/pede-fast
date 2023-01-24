@@ -4,7 +4,6 @@ import Button from "../../../../components/Button/Button"
 import { AiOutlinePlusCircle } from "react-icons/ai"
 import { MdCancel } from "react-icons/md"
 import { useState } from "react"
-import { stringify } from "querystring"
 import { v4 as uuid } from "uuid"
 
 interface OptionsItems {

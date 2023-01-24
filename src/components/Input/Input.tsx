@@ -10,7 +10,7 @@ export default function Input({ setFieldValue, ...props }) {
 
    return (
       <div className={styles.inputContainer}>
-         <input className={styles.input} placeholder={props.placeholder} onChange={handleSet} type={props.type} name={props.name} {...props} />
+         <input className={styles.input} placeholder={props.placeholder} onChange={handleSet} type={props.type} name={props.name}  {...props} />
       </div>
    )
 

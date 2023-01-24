@@ -32,9 +32,9 @@ interface ProductType {
 
 type openedFromType = "new" | "existent"
 
-export default function CreateProduct(props: ProductType) {
-
+export default function CreateProduct({ ...props }: ProductType) {
    /* Variable to assing default value when called by product create */
+   console.log(props.description)
    let productNameDefaultValue = ""
    let productDescriptionDefaultValue = ""
    let productPriceDefaultValue = ""
@@ -65,7 +65,7 @@ export default function CreateProduct(props: ProductType) {
    const [chosedOption, setChoosedOption] = useState<CreatedOptionType>();
 
 
-   function handleClick() {
+   function handleCreateUpdateProduct() {
       console.log("clicado no botao")
    }
 
@@ -120,12 +120,14 @@ export default function CreateProduct(props: ProductType) {
             </div>
 
             <form action="" className={styles.inputContainer}>
-               <Input type="text" autoComplete="off" setFieldValue={setProductName} name={"productName"} placeholder="Nome do Produto" />
-               <Input type="text" setFieldValue={setProductDescription} name={"Description"} placeholder="Descrição" />
+               <Input type="text" value={productName} autoComplete="off" setFieldValue={setProductName} name={"productName"} placeholder="Nome do Produto" />
+               <Input type="text" value={productDescription} setFieldValue={setProductDescription} name={"Description"} placeholder="Descrição" />
 
                <div className={styles.priceAndStockContainer}>
-                  <Input type="number" setFieldValue={setProductPrice} name={"price"} placeholder="Preço" />
-                  <Input type="number" setFieldValue={setProductStock} name={"stock"} placeholder="Quantidade" />
+                  <p>Preço:</p>
+                  <Input type="number" value={productPrice} setFieldValue={setProductPrice} name={"price"} />
+                  <p>Estoque: </p>
+                  <Input type="number" value={productStock} setFieldValue={setProductStock} name={"stock"} />
                </div>
             </form>
 
@@ -136,7 +138,7 @@ export default function CreateProduct(props: ProductType) {
             <div className={styles.options}>
                <h4 onClick={addOption}>Opçoes e Adicionais</h4>
                <ul>
-                  {options.map((option) =>
+                  {options?.map((option) =>
                      <div key={option.id} className={styles.newItemsContainer}>
                         <li onClick={() => onClickAdditionals(option.id)}>{option.name}</li>
                         <MdCancel className={styles.deleteItem} color="#DC6A6A" size={30} cursor="pointer" onClick={() => handleDeleteOption(option.id)} />
@@ -147,7 +149,7 @@ export default function CreateProduct(props: ProductType) {
             </div>
 
             <div className={styles.buttonContainerparent}>
-               <Button handleClick={handleClick}>{props.createOrUpdate === "update" ? "Atualizar produto" : "Criar Produto"}</Button>
+               <Button handleClick={handleCreateUpdateProduct}>{props.createOrUpdate === "update" ? "Atualizar produto" : "Criar Produto"}</Button>
             </div>
 
          </div>

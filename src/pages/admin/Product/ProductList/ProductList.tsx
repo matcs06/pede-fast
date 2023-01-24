@@ -2,8 +2,8 @@ import { productList } from "./Products"
 import styles from "./ProductList.module.scss"
 import Image from "next/image"
 import { useState } from "react"
-import SideBar from "../../../../components/SideBar/SideBar";
 import CreateProduct from "../CreateProduct/CreateProduct";
+import { MdCancel } from "react-icons/md"
 
 interface OptionsItems {
    name: string;
@@ -35,13 +35,32 @@ export default function ProductList() {
    const fielteredProducts = productList.filter((item) => item.title.toLocaleLowerCase().includes(inputedValue.toLocaleLowerCase()))
    const [showEditProductModal, setShowEditProductModal] = useState(false)
 
+   const productTest = {
+      name: "Petit gateau",
+      description: "petiti gateau gostoso",
+      price: "12",
+      quantity: "20",
+      image_url: "https://www.acasaencantada.com.br/wp-content/uploads/2021/07/Mousse-de-chocolate-zero-acucar.webp",
+      options: [
+         {
+            id: "123123",
+            name: "testtt",
+            isRequired: false,
+            maximumQuantity: "2",
+            items: [
+
+            ]
+         }
+      ],
+      createOrUpdate: "update"
+   }
+
    function handleSerach(event: any) {
       event?.preventDefault()
       setImputedValue(event.target.value)
    }
 
    function handleClickProdutc() {
-      console.log("entrou aqui")
 
       setShowEditProductModal(true)
 
@@ -73,6 +92,16 @@ export default function ProductList() {
          </main>
          {showEditProductModal &&
             <div className={styles.editProductModal}>
+               <MdCancel className={styles.deleteItem} color="#DC6A6A" size={30} cursor="pointer" onClick={() => { setShowEditProductModal(!showEditProductModal) }} />
+               <CreateProduct
+                  name={productTest.name}
+                  description={productTest.description}
+                  createOrUpdate={"update"}
+                  image_url={productTest.image_url}
+                  options={productTest.options}
+                  price={productTest.price}
+                  quantity={productTest.quantity}
+                  key={productTest.name} />
             </div>
          }
 
