@@ -24,7 +24,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      bottom: 10%;
+      bottom: 12%;
    }
 }
 
@@ -41,5 +41,17 @@
    .inputContainer {
       display: flex;
       height: 20vh;
+   }
+}
+
+.chooseColorContainer {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+
+   p {
+      margin-left: 5%;
+      color: #616161;
+      width: 80%;
    }
 }

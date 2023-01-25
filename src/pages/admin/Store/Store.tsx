@@ -10,14 +10,23 @@ export function Store() {
    const [storeName, setStoreName] = useState("")
    const [storeAddress, setSoreAddress] = useState("")
    const [bannerCollor, setBannerCollor] = useState("#aabbcc")
+   const [showPicker, setShowPicker] = useState(false)
+
    return (
       <div className={styles.mainContainer}>
          <h3>Configurar Loja</h3>
          <div className={styles.inputContainer}>
             <Input setFieldValue={setStoreName} placeholder={"Nome da Loja"} name={"store name"} />
             <Input setFieldValue={setSoreAddress} placeholder={"Endereço"} name={"store address"} />
-            <Input value={bannerCollor} setFieldValue={() => { }} placeholder={"Cor do banner"} name={"banner collor"} />
-            <HexColorPicker color={bannerCollor} onChange={setBannerCollor} />;
+            <div className={styles.chooseColorContainer}>
+               <p>Cor secundária:</p>
+               <Input onMouseLeave={() => setShowPicker(false)} onClick={() => setShowPicker(true)} value={bannerCollor} setFieldValue={() => { }} placeholder={"Cor do banner"} name={"banner collor"} />
+
+            </div>
+            {showPicker && (
+               <HexColorPicker hidden={showPicker} color={bannerCollor} onChange={setBannerCollor} />
+
+            )}
          </div>
          <div className={styles.imageUploadContainer}>
             <input placeholder="Escolha a perfil da loja" type="file" />
