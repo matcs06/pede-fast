@@ -6,6 +6,8 @@ import { MdDeliveryDining } from "react-icons/md"
 import { BiLinkAlt } from "react-icons/bi"
 import ProductList from "../../pages/admin/Product/ProductList/ProductList"
 import CreateProduct from "../../pages/admin/Product/CreateProduct/CreateProduct"
+import { IoStorefrontSharp } from "react-icons/io5"
+import { Store } from "../../pages/admin/Store/Store"
 export const sideBarOptions = [
 
 
@@ -20,14 +22,9 @@ export const sideBarOptions = [
       component: <CreateProduct />,
    },
    {
-      title: "Pedidos em aberto",
-      icon: <TbReportSearch size={25} />,
-      component: <div>ver pedidos abertos </div>,
-   },
-   {
-      title: "Pedidos fechados",
-      icon: <GoPackage size={25} />,
-      component: <div>ver pedidos fechados </div>,
+      title: "Minha Loja",
+      icon: <IoStorefrontSharp size={25} />,
+      component: <Store />,
    },
    {
       title: "Entrega",

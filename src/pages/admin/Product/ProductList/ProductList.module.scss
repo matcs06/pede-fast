@@ -16,7 +16,7 @@
          border: 1px solid var(--laranja-main);
          border-radius: 8px;
          padding: 5px 40px 5px 20px;
-         width: 80%;
+         width: 90%;
          height: 40px;
          font-size: 16px;
          background-color: transparent;
@@ -35,12 +35,13 @@
    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
    justify-content: center;
    align-items: center;
-   width: 95%;
+   width: 100%;
    gap: 1%;
    max-height: 80vh;
    overflow-y: scroll;
    margin-top: 5%;
    padding-left: 10%;
+   padding-right: 10%;
 }
 
 .productCard {

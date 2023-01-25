@@ -15,12 +15,16 @@
       border-left: none;
       border-right: none;
       border-bottom: 1px solid var(--cinza-escuro);
-      color: black;
+      color: #605E5E;
       font-size: 16px;
 
 
       &:focus {
          outline: none;
+      }
+
+      &::placeholder {
+         color: #ababab;
       }
    }
 }

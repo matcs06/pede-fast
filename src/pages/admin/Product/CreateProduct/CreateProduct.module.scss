@@ -46,22 +46,19 @@
 
    p {
       color: rgb(99, 99, 99);
+      margin-bottom: 10px;
    }
 
    div {
-      justify-content: flex-start;
-      display: flex;
-      align-items: center;
-      justify-content: center;
 
       input[name="price"] {
-         max-width: 80px;
+         max-width: 100px;
          justify-content: center;
 
       }
 
       input[name="stock"] {
-         max-width: 80px;
+         max-width: 100px;
          justify-content: center;
 
       }
@@ -180,5 +177,5 @@
    display: flex;
    align-items: center;
    justify-content: center;
-   bottom: 2%;
+   bottom: 10%;
 }
