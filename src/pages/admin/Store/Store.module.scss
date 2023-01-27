@@ -16,6 +16,12 @@
    .inputContainer {
       width: 80%;
       margin: 5% 0 5% 0;
+
+      div {
+         input {
+            height: 50px;
+         }
+      }
    }
 
    .buttonContainer {
@@ -54,4 +60,14 @@
       color: #616161;
       width: 80%;
    }
+}
+
+.colorPicker {
+
+   width: 100%;
+   display: flex;
+   align-items: center;
+   justify-content: flex-end;
+   padding-right: 12%;
+
 }

@@ -20,11 +20,14 @@ export function Store() {
             <Input setFieldValue={setSoreAddress} placeholder={"Endereço"} name={"store address"} />
             <div className={styles.chooseColorContainer}>
                <p>Cor secundária:</p>
-               <Input onMouseLeave={() => setShowPicker(false)} onClick={() => setShowPicker(true)} value={bannerCollor} setFieldValue={() => { }} placeholder={"Cor do banner"} name={"banner collor"} />
+               <Input onClick={() => setShowPicker(true)} value={bannerCollor} setFieldValue={() => { }} placeholder={"Cor do banner"} name={"banner collor"} />
 
             </div>
             {showPicker && (
-               <HexColorPicker hidden={showPicker} color={bannerCollor} onChange={setBannerCollor} />
+               <div className={styles.colorPicker}>
+
+                  <HexColorPicker onMouseLeave={() => setShowPicker(false)} hidden={showPicker} color={bannerCollor} onChange={setBannerCollor} />
+               </div>
 
             )}
          </div>
