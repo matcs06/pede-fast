@@ -1,13 +1,14 @@
-import { GrProductHunt } from "react-icons/gr"
-import { IoIosAddCircle } from "react-icons/io"
-import { TbReportSearch } from "react-icons/tb"
-import { GoPackage } from "react-icons/go"
-import { MdDeliveryDining } from "react-icons/md"
-import { BiLinkAlt } from "react-icons/bi"
+
 import ProductList from "../../pages/admin/Product/ProductList/ProductList"
 import CreateProduct from "../../pages/admin/Product/CreateProduct/CreateProduct"
-import { IoStorefrontSharp } from "react-icons/io5"
+import Delivery from "../../pages/admin/Delivery/Delivery"
+
 import { Store } from "../../pages/admin/Store/Store"
+import { IoStorefrontSharp } from "react-icons/io5"
+import { GrProductHunt } from "react-icons/gr"
+import { IoIosAddCircle } from "react-icons/io"
+import { MdDeliveryDining } from "react-icons/md"
+import { BiLinkAlt } from "react-icons/bi"
 export const sideBarOptions = [
 
 
@@ -29,7 +30,7 @@ export const sideBarOptions = [
    {
       title: "Entrega",
       icon: <MdDeliveryDining size={25} />,
-      component: <div>Configuracoes de entrega</div>
+      component: <Delivery />,
    },
 
    {
