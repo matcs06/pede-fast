@@ -1,7 +1,6 @@
 import styles from "./Delivery.module.scss"
 import Input from "../../../components/Input/Input"
 import CheckBox from "../../../components/CheckBox/CheckBox"
-import Dropdown from 'react-dropdown';
 import { useState } from "react"
 import { BsFillArrowDownCircleFill } from "react-icons/bs"
 export default function Delivery() {
