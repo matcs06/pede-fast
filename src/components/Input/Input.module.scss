@@ -4,11 +4,12 @@
    justify-content: center;
    width: 100%;
    height: auto;
-
+   padding: 0;
+   margin: 0;
 
    .input {
       padding: 5px 10px 2px 20px;
-      background-color: transparent;
+      background-color: rgba(181, 181, 181, 0.261);
       width: 100%;
       height: 40px;
       border-top: none;

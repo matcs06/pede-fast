@@ -34,7 +34,6 @@ type openedFromType = "new" | "existent"
 
 export default function CreateProduct({ ...props }: ProductType) {
    /* Variable to assing default value when called by product create */
-   console.log(props.description)
    let productNameDefaultValue = ""
    let productDescriptionDefaultValue = ""
    let productPriceDefaultValue = ""
