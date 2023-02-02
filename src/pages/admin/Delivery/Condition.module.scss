@@ -1,0 +1,30 @@
+.mainContainer {
+   position: relative;
+   background-color: #fff;
+   height: 90vh;
+   z-index: 20;
+   width: 80%;
+   border-radius: 8px;
+   padding: 0;
+}
+
+.closeContainer {
+   position: absolute;
+   width: 60px;
+   top: 2%;
+   right: 1px;
+   display: flex;
+   justify-content: center;
+
+
+   .close {
+      color: var(--laranja-main);
+      cursor: pointer;
+      transition: 0.2s;
+
+
+      &:hover {
+         color: rgb(195, 78, 6);
+      }
+   }
+}

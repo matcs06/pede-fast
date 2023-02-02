@@ -1,9 +1,13 @@
 import styles from "./Delivery.module.scss"
+import { useState } from "react"
+import { BsFillArrowDownCircleFill } from "react-icons/bs"
+import { AiFillPlusCircle } from "react-icons/ai"
+
 import Input from "../../../components/Input/Input"
 import Button from "../../../components/Button/Button"
 import CheckBox from "../../../components/CheckBox/CheckBox"
-import { useState } from "react"
-import { BsFillArrowDownCircleFill } from "react-icons/bs"
+import Condition from "./Condition"
+
 export default function Delivery() {
    const [deliveryTax, setDeliveryTax] = useState("")
    const [checkBox, setCheckBox] = useState(false)
@@ -11,6 +15,8 @@ export default function Delivery() {
    const [paramter, setParameter] = useState("")
 
    const [showDropDown, setShowDropDown] = useState(false)
+
+   const [showCreateCondition, setShowCreateCondition] = useState(false)
 
    const discountConditions = [
       "Valor do item",
@@ -43,13 +49,15 @@ export default function Delivery() {
 
          {checkBox && (
             <div className={styles.condition}>
-               <p>Condição: </p>
-
                <ul className={styles.dropDownContainer} >
                   <div className={styles.inputArrowContainer}>
-                     <Input value={selectedCondition} name={"discount"} type={"text"} placeholder={"escolha"} readOnly={"readonly"} setFieldValue={setDeliveryTax} />
+                     <Input value={selectedCondition} name={"discount"} type={"text"} placeholder={"Condição"} readOnly={"readonly"} setFieldValue={setDeliveryTax} />
                      <BsFillArrowDownCircleFill size={20} className={styles.arrow} onClick={handleShowDropDown} />
+                     <AiFillPlusCircle size={20} className={styles.add} onClick={() => setShowCreateCondition(true)} />
+
                   </div>
+
+
 
                   {discountConditions.map((option) => (
 
@@ -76,7 +84,11 @@ export default function Delivery() {
          <div className={styles.buttonContainer}>
             <Button>Salvar</Button>
          </div>
-
+         {showCreateCondition && (
+            <div className={styles.conditionModal}>
+               <Condition showModal={setShowCreateCondition} />
+            </div>
+         )}
 
       </div>
    )
