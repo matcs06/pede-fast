@@ -30,7 +30,12 @@ export default function Delivery() {
       setCheckBox(!checkBox)
    }
 
-   function handleShowDropDown() {
+   function handleShowDropDown(option: string) {
+
+      if (option !== "") {
+
+         setSelectedCondition(option)
+      }
       setShowDropDown(!showDropDown)
    }
 
@@ -52,7 +57,7 @@ export default function Delivery() {
                <ul className={styles.dropDownContainer} >
                   <div className={styles.inputArrowContainer}>
                      <Input value={selectedCondition} name={"discount"} type={"text"} placeholder={"Condição"} readOnly={"readonly"} setFieldValue={setDeliveryTax} />
-                     <BsFillArrowDownCircleFill size={20} className={styles.arrow} onClick={handleShowDropDown} />
+                     <BsFillArrowDownCircleFill size={20} className={styles.arrow} onClick={() => { handleShowDropDown("") }} />
                      <AiFillPlusCircle size={20} className={styles.add} onClick={() => setShowCreateCondition(true)} />
 
                   </div>
@@ -61,7 +66,7 @@ export default function Delivery() {
 
                   {discountConditions.map((option) => (
 
-                     <li style={{ display: showDropDown ? "flex" : "none" }} onClick={() => { setSelectedCondition(option) }}>{option}</li>
+                     <li style={{ display: showDropDown ? "flex" : "none" }} onClick={() => { handleShowDropDown(option) }}>{option}</li>
                   ))}
                </ul>
 
