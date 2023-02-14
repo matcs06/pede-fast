@@ -2,6 +2,13 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+
+  -webkit-user-select: none;
+  /* Safari */
+  -ms-user-select: none;
+  /* IE 10 and IE 11 */
+  user-select: none;
+  /* Standard syntax */
 }
 
 :root {
@@ -21,9 +28,10 @@
     --vermelho-main: #F24E1E;
     --cinza-line: #C3C3C3;
     --cinza-escuro: rgb(231, 230, 229);
-
+    --sas: #0ed004;
     --sidebar-width: 280px;
 
+    --secondary-textcolor: rgb(99, 99, 99)
   }
 }
 

@@ -10,7 +10,7 @@ export default function Condition(props: any) {
 
    const conditionsAvailable = [
       { key: 1, value: "maior ou igual" },
-      { key: 2, value: "ienor ou igual" },
+      { key: 2, value: "menor ou igual" },
       { key: 3, value: "maior" },
       { key: 4, value: "menor" },
       { key: 5, value: "igual" },
@@ -66,7 +66,7 @@ export default function Condition(props: any) {
 
          </main>
          <div className={styles.buttonContainer}>
-            <Button>Salvar</Button>
+            <Button>Adicionar</Button>
          </div>
       </div>
    )

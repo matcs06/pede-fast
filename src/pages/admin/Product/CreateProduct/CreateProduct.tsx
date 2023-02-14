@@ -5,6 +5,9 @@ import Button from "../../../../components/Button/Button"
 import Options from "./Options"
 import { MdCancel } from "react-icons/md"
 
+import ImageUploading from 'react-images-uploading';
+
+
 interface OptionsItems {
    name: string;
    id: string;
@@ -55,6 +58,8 @@ export default function CreateProduct({ ...props }: ProductType) {
    const [productDescription, setProductDescription] = useState(productDescriptionDefaultValue)
    const [productPrice, setProductPrice] = useState(productPriceDefaultValue)
    const [productStock, setProductStock] = useState(productQuantityDefaultValue)
+   const [images, setImages] = useState([])
+
    const [showModal, setShowModal] = useState(false)
    const [openedFrom, setOpenedFrom] = useState<openedFromType>("new")
 
@@ -111,6 +116,11 @@ export default function CreateProduct({ ...props }: ProductType) {
       setOptions(optionsAfterDeleted)
    }
 
+   const onImageChange = (imageList: any, addUpdateIndex: any) => {
+      // data for submit
+      setImages(imageList);
+   };
+
    return (
       <>
          <div className={styles.mainContainer}>
@@ -131,7 +141,45 @@ export default function CreateProduct({ ...props }: ProductType) {
             </form>
 
             <div className={styles.imageUploadContainer}>
-               <input type="file" />
+               <ImageUploading
+                  multiple={false}
+                  value={images}
+                  onChange={onImageChange}
+                  dataURLKey="data_url"
+               >
+                  {({
+                     imageList,
+                     onImageUpload,
+                     onImageUpdate,
+                     onImageRemove,
+                     isDragging,
+                     dragProps,
+                  }) => (
+                     // write your building UI
+                     <div className={styles.addImageContainer}>
+                        {images.length == 0 && (
+                           <button
+                              style={isDragging ? { color: 'red' } : undefined}
+                              onClick={onImageUpload}
+                              {...dragProps}
+                           >
+                              Adicione uma imagem
+                           </button>
+                        )}
+
+                        &nbsp;
+                        {imageList.map((image, index) => (
+                           <div key={index} className={styles.imageItemContainer}>
+                              <img src={image['data_url']} alt="" width="100" />
+                              <div className={styles.updateRemoveImageContainer}>
+                                 <button onClick={() => onImageUpdate(index)}>Atualizar</button>
+                                 <button onClick={() => onImageRemove(index)}>Remover</button>
+                              </div>
+                           </div>
+                        ))}
+                     </div>
+                  )}
+               </ImageUploading>
             </div>
 
             <div className={styles.options}>

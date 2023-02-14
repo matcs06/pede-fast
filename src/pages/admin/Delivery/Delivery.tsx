@@ -64,9 +64,9 @@ export default function Delivery() {
 
 
 
-                  {discountConditions.map((option) => (
+                  {discountConditions.map((option, index) => (
 
-                     <li style={{ display: showDropDown ? "flex" : "none" }} onClick={() => { handleShowDropDown(option) }}>{option}</li>
+                     <li key={index} style={{ display: showDropDown ? "flex" : "none" }} onClick={() => { handleShowDropDown(option) }}>{option}</li>
                   ))}
                </ul>
 
