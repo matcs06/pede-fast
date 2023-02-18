@@ -15,12 +15,13 @@
 
 .optionsContainer {
    max-width: 600px;
-   position: relative;
+   position: absolute;
    width: 80%;
    border-radius: 8px;
    height: 80vh;
    background-color: rgb(255, 255, 255);
    transition: 0.2s;
+   max-width: 600px;
 
    display: flex;
    align-items: center;
@@ -163,4 +164,83 @@
    justify-content: center;
    bottom: 20px;
    width: 100%;
+}
+
+.AditionalOptions {
+   display: flex;
+   flex-direction: row;
+   width: 100%;
+   position: relative;
+   margin-top: 2%;
+   justify-content: space-around;
+
+
+}
+
+.maximumQuantity {
+   display: flex;
+   position: absolute;
+   left: 50%;
+   width: 45%;
+   align-items: center;
+
+   p {
+      color: #616161;
+      width: 90%;
+   }
+
+   div {
+      input {
+         width: 50px;
+      }
+   }
+}
+
+.statusContainer {
+   position: absolute;
+   display: flex;
+   width: 30%;
+   left: 5%;
+
+
+   ul {
+
+      background: var(--cinza-escuro);
+      border-radius: 2px;
+      width: 50%;
+      height: auto;
+      padding: 5px 0 0 10px;
+      color: #fff;
+      transition: 0.2s;
+      list-style-type: none;
+      line-height: 25px;
+      cursor: pointer;
+      padding: 0 5px 0 5px;
+
+
+
+      p {
+         width: 100%;
+         font-family: "Roboto";
+      }
+
+      li {
+
+         transition: 0.2s;
+         top: 10%;
+         font-family: "Roboto";
+
+         &:hover {
+            background-color: #737272;
+            border-radius: 3px;
+            padding-left: 5px;
+         }
+      }
+   }
+
+   p {
+      color: #616161;
+      width: 50%;
+   }
+
 }

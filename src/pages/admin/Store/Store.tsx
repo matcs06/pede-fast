@@ -17,8 +17,8 @@ export function Store() {
    const [displayStatus, setDisplayStatus] = useState(false)
 
    const status = [
-      { key: 1, status: "online" },
-      { key: 2, status: "offline" }
+      { key: 1, status: "aberto" },
+      { key: 2, status: "fechado" }
 
    ]
 
@@ -46,11 +46,11 @@ export function Store() {
             <div className={styles.statusContainer}>
                <p>Status: </p>
                <ul >
-                  <p style={{ color: storeStatus === "online" ? "#0ed004" : "#F24E1E" }} onClick={() => setDisplayStatus(!displayStatus)}>{storeStatus == "" ? "Selecione" : storeStatus}</p>
+                  <p style={{ color: storeStatus === "aberto" ? "#0ed004" : "#F24E1E" }} onClick={() => setDisplayStatus(!displayStatus)}>{storeStatus == "" ? "Selecione" : storeStatus}</p>
 
                   {displayStatus && status.map((sstatus) =>
 
-                     <li style={{ color: sstatus.status === "online" ? "#0ed004" : "#F24E1E" }} key={sstatus.key} onClick={() => onClickStatus(sstatus.status)}>{sstatus.status}</li>
+                     <li style={{ color: sstatus.status === "aberto" ? "#0ed004" : "#F24E1E" }} key={sstatus.key} onClick={() => onClickStatus(sstatus.status)}>{sstatus.status}</li>
                   )}
 
                </ul>

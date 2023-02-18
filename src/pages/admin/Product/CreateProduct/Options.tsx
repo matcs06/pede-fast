@@ -35,11 +35,23 @@ export default function Options({ ...props }) {
    }
 
    const [optionName, setOptionName] = useState(passedOptionName) /* Nome da opcao topo */
+   const [optionmaximumQuantity, setOptionmaximumQuantity] = useState(0)
+
    const [isOptaional, setIsOptional] = useState(passedOptionIsRequited) /* Flag para salvar o is optional */
    const [optionsItems, setOptionItems] = useState<OptionsItems[]>(passedItems) /* Lista de itens */
 
    const [item, setItem] = useState("") /* Salva o item */
    const [itemValue, setItemValue] = useState("") /* Salva o valor do item */
+
+
+   const [displayStatus, setDisplayStatus] = useState(false)
+   const [optionalOrRequired, setOptionalOrRequired] = useState("")
+
+   const status = [
+      { key: 1, status: "obrigatório" },
+      { key: 2, status: "opcional" }
+
+   ]
 
    function AdditemToOption() {
       const newOptionItem: OptionsItems = {
@@ -78,6 +90,12 @@ export default function Options({ ...props }) {
       props.setShowModal(false)
    }
 
+   const onClickStatus = (optionalOrRequired: string) => {
+
+      setDisplayStatus(false)
+      setOptionalOrRequired(optionalOrRequired)
+   }
+
    return (
       <div className={styles.optionsTransparentContainer}>
          <div className={styles.optionsContainer}>
@@ -85,6 +103,28 @@ export default function Options({ ...props }) {
             <h3>{props.productName}</h3>
             <div className={styles.optionInfoContainer}>
                <Input name="option" value={optionName} setFieldValue={setOptionName} placeholder="Nome da opção" />
+
+            </div>
+            <div className={styles.AditionalOptions}>
+               <div className={styles.statusContainer}>
+                  <p>Status: </p>
+                  <ul >
+                     <p style={{ color: optionalOrRequired === "opcional" ? "#0ed004" : "#F24E1E" }} onClick={() => setDisplayStatus(!displayStatus)}>{optionalOrRequired == "" ? "Selecione" : optionalOrRequired}</p>
+
+                     {displayStatus && status.map((sstatus) =>
+
+                        <li style={{ color: sstatus.status === "opcional" ? "#0ed004" : "#F24E1E" }} key={sstatus.key} onClick={() => onClickStatus(sstatus.status)}>{sstatus.status}</li>
+                     )}
+
+                  </ul>
+               </div>
+               {optionalOrRequired == "obrigatório" && (
+                  <div className={styles.maximumQuantity}>
+                     <p>Quant. Máxima</p>
+                     <Input type="number" name="quantidade" value={optionmaximumQuantity} setFieldValue={setOptionmaximumQuantity} />
+                  </div>
+               )}
+
             </div>
 
             <div className={styles.addItemContainer}>

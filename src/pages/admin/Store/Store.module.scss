@@ -103,11 +103,10 @@
 
 .statusContainer {
    display: flex;
-   align-items: center;
-   margin-top: 4%;
+   position: absolute;
+   width: 80%;
 
    ul {
-      position: absolute;
       right: 10%;
       background: var(--cinza-escuro);
       border-radius: 2px;
@@ -119,7 +118,6 @@
       list-style-type: none;
       line-height: 25px;
       cursor: pointer;
-      top: 29%;
 
 
 
@@ -159,4 +157,15 @@
    padding-right: 12%;
    top: 24%;
 
+}
+
+
+@media (max-width: 500px) {
+   .statusContainer {
+
+      ul {
+
+         top: 31%;
+      }
+   }
 }
