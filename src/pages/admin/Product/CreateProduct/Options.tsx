@@ -54,15 +54,22 @@ export default function Options({ ...props }) {
    ]
 
    function AdditemToOption() {
-      const newOptionItem: OptionsItems = {
-         name: item,
-         id: uuid(),
-         value: itemValue
+
+      if (item == "") {
+         window.alert("Informe algum item para a opçao")
+      } else {
+
+         const newOptionItem: OptionsItems = {
+            name: item,
+            id: uuid(),
+            value: itemValue
+         }
+
+         setOptionItems([...optionsItems, newOptionItem])
+         setItem("")
+         setItemValue("")
       }
 
-      setOptionItems([...optionsItems, newOptionItem])
-      setItem("")
-      setItemValue("")
    }
 
    function removeItem(id: string) {
