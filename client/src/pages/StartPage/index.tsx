@@ -1,6 +1,8 @@
+import CartButton from "../components/CartButton"
+import AddRemove from "../components/AddRemove"
 export default function Test() {
    return (
-      <div className="flex relative flex-col items-center text-dark-gray h-full">
+      <div className="flex relative flex-col items-center text-dark-gray min-h-screen">
          <header className="bg-secondary-orange h-28 w-full">
          </header>
          <div className="w-40 absolute top-10 rounded-lg  flex flex-col justify-center items-center shadow-dark-gray shadow-md	 bg-light-gray h-28 justify-self-center">
@@ -18,15 +20,10 @@ export default function Test() {
                   <p className="mt-3 text-light-gree text-sm">Por apenas: <b> 12,00 R$</b></p>
                </div>
                <img src="./test2.png" alt="image-produto" className="rounded-lg w-28 h-28 mt-1" />
-
-
             </div>
 
-
-
          </div>
-
-
+         <CartButton>Continuar</CartButton>
       </div>
    )
 }
