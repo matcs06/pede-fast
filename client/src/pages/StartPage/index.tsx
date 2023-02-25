@@ -26,7 +26,7 @@ interface ProductType {
 }
 export default function Test() {
    return (
-      <div className="flex relative flex-col items-center text-dark-gray min-h-screen">
+      <div className="flex relative flex-col items-center text-dark-gray min-h-phoneHeigth">
          <header className="bg-secondary-orange h-28 w-full">
          </header>
          <div className="w-40 absolute top-10 rounded-lg  flex flex-col justify-center items-center shadow-dark-gray shadow-md	 bg-light-gray h-28 justify-self-center">
@@ -47,7 +47,10 @@ export default function Test() {
             </div>
 
          </div>
-         <CartButton>Continuar</CartButton>
+         <div className="flex w-full justify-center absolute bottom-3">
+            <CartButton>Continuar</CartButton>
+         </div>
+
       </div>
    )
 }

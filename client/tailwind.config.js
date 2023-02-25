@@ -16,6 +16,10 @@ module.exports = {
     borderWidth: {
       "b-1/5": "0.5px"
     },
+
+    minHeight: {
+      "phoneHeigth": "100svh"
+    },
     colors: {
       "light-gray": "#F5F5F5",
       "light-gray-2": "#D6D6D6",
