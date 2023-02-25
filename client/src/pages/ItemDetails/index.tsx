@@ -37,13 +37,13 @@ export default function ItemDetail() {
          {
             id: v4(),
             name: "Escolha o pão",
-            isRequired: true,
+            isRequired: false,
             maximumQuantity: "0",
             items: [
                {
                   id: v4(),
                   name: "frances",
-                  value: "2,00"
+                  value: ""
                },
                {
                   id: v4(),
@@ -116,9 +116,9 @@ export default function ItemDetail() {
                <Image className="object-fill w-full h-52 max-w-xs" src={productModel.image_url} alt="Image-Produto" height={350} width={350} />
             </div>
             <div className="justify-between mt-3 items-stretch ml-2">
-               <p className="text-secondary-orange font-light mb-1 ">{productModel.name}</p>
-               <p className="text-secondary-orange text-xs font-light mb-1  ">{productModel.description}</p>
-               <p className="text-secondary-orange font-inter text-xs font-semibold  ">{productModel.price} R$</p>
+               <p className="text-secondary-orange font-bold mb-1 ">{productModel.name}</p>
+               <p className="text-dark-gray text-xs font-light mb-1  ">{productModel.description}</p>
+               <p className="text-dark-gray font-inter text-sm font-normal  ">R$ {productModel.price}</p>
 
             </div>
 
@@ -132,12 +132,12 @@ export default function ItemDetail() {
                         <p className="text-xs bg-secondary-orange h-1/2 w-1/4 rounded-md flex items-center justify-center text-primary-bk">{productOptions.isRequired ? "obrigatório" : "opicional"}  </p>
                      </div>
                      {productOptions.items.map((optionItems) => (
-                        <div key={optionItems.id} className="flex mt-2 w-3/4 px-1 relative  border-b-b-1/5 border-b-light-gray-2">
-                           <div>
+                        <div key={optionItems.id} className="flex mt-2 w-3/4 h-11 px-1 relative  border-b-b-1/5 border-b-light-gray-2">
+                           <div className="flex flex-col justify-center">
                               <p className="text-dark-gray text-sm font-normal">{optionItems.name}</p>
-                              {Number(optionItems.value[0]) > 0 && <p className="text-xs font-normal mb-1 text-secondary-orange">{optionItems.value} R$</p>}
+                              {Number(optionItems.value[0]) > 0 && <p className="text-xs font-normal mb-1 text-secondary-orange">R$ {optionItems.value}</p>}
                            </div>
-                           <div className="absolute right-1">
+                           <div className="absolute right-1 top-2">
 
                               <AddRemove quantity={0} setQuantity={() => { }} optionStyle="small" />
                            </div>
