@@ -9,7 +9,7 @@ export default function CartButton({ children, numberOfItems = 1, cartValue = "2
          </div>
          {children}
          <div>
-            <p className="text-sm rounded-full">{cartValue} R$</p>
+            <p className="text-sm font-bold rounded-full">{cartValue} R$</p>
          </div>
 
       </div>

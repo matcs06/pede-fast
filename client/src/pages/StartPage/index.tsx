@@ -1,5 +1,29 @@
 import CartButton from "../components/CartButton"
 import AddRemove from "../components/AddRemove"
+
+interface OptionsItems {
+   name: string;
+   id: string;
+   value: string
+}
+
+interface CreatedOptionType {
+   id: string,
+   name: string,
+   isRequired: boolean,
+   maximumQuantity: string,
+   items: OptionsItems[]
+}
+
+interface ProductType {
+   name: string,
+   description: string,
+   price: string,
+   quantity: string,
+   image_url: string,
+   options: CreatedOptionType[]
+
+}
 export default function Test() {
    return (
       <div className="flex relative flex-col items-center text-dark-gray min-h-screen">
