@@ -1,0 +1,18 @@
+.checkBoxContainer {
+   width: 100%;
+   display: flex;
+   align-items: center;
+
+   label {
+      display: flex;
+      justify-content: center;
+      width: 80%;
+      color: var(--secondary-textcolor);
+
+      input {
+         cursor: pointer;
+         width: 30px;
+      }
+   }
+
+}

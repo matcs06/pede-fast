@@ -1,0 +1,49 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+
+  -webkit-user-select: none;
+  /* Safari */
+  -ms-user-select: none;
+  /* IE 10 and IE 11 */
+  user-select: none;
+  /* Standard syntax */
+}
+
+:root {
+
+
+  background-color: aliceblue;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+
+    --cinza-main: #F5F5F5;
+    --laranja-main: #DC6A6A;
+    --branco-main: #FFFFFF;
+    --preto-main: #514A4A;
+    --verde-main: #0FA958;
+    --vermelho-main: #F24E1E;
+    --cinza-line: #C3C3C3;
+    --cinza-escuro: rgb(231, 230, 229);
+    --sas: #0ed004;
+    --sidebar-width: 280px;
+
+    --secondary-textcolor: rgb(99, 99, 99)
+  }
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+}

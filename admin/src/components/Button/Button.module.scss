@@ -1,0 +1,17 @@
+.buttonContainer {
+   display: flex;
+   width: 80%;
+   justify-content: center;
+   align-items: center;
+   color: aliceblue;
+   background-color: var(--laranja-main);
+   height: 40px;
+   border-radius: 8px;
+   margin: 10px 0 10px 0;
+   cursor: pointer;
+   transition: 0.2s;
+
+   &:hover {
+      background: rgb(190, 81, 13);
+   }
+}

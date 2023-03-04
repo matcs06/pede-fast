@@ -1,0 +1,232 @@
+.mainContainer {
+   position: relative;
+   display: flex;
+   flex-direction: column;
+   width: 100%;
+   align-items: center;
+   justify-content: flex-start;
+   margin-top: 2%;
+   max-width: 700px;
+   height: 100vh;
+   background-color: aliceblue;
+}
+
+.headerContainer {
+   display: flex;
+   width: 90%;
+   margin: 5% 0 5% 0;
+   align-items: center;
+   justify-content: center;
+
+   header {
+      font-size: 20px;
+      color: var(--laranja-main);
+      font-weight: bold;
+   }
+}
+
+
+.inputContainer {
+   display: flex;
+   width: 70%;
+   flex-direction: column;
+
+   div {
+      margin-bottom: 5px;
+
+      input {
+         height: 50px;
+      }
+   }
+
+
+}
+
+.priceAndStockContainer {
+   display: flex;
+   flex-direction: row;
+   align-items: center;
+   justify-content: center;
+   padding-left: 5%;
+
+   p {
+      color: rgb(99, 99, 99);
+      margin-bottom: 10px;
+   }
+
+   span {
+
+      color: var(--laranja-main);
+      margin-left: 10px;
+   }
+
+   div {
+
+
+      input[name="price"] {
+         max-width: 100px;
+         justify-content: center;
+
+      }
+
+      input[name="stock"] {
+         max-width: 100px;
+         justify-content: center;
+
+      }
+   }
+
+}
+
+.imageUploadContainer {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   background-color: var(--cinza-escuro);
+   border-radius: 8px;
+   height: 20vh;
+   width: 70%;
+
+   .inputContainer {
+      display: flex;
+      height: 20vh;
+   }
+
+   .addImageContainer {
+
+      button {
+         height: 30px;
+         padding: 0 5px 0 5px;
+         cursor: pointer;
+      }
+   }
+
+   .updateRemoveImageContainer {
+      display: flex;
+      justify-content: space-around;
+
+
+      button {
+         margin-right: 10px;
+         height: 25px;
+         cursor: pointer;
+         padding: 0 5px 0 5px;
+      }
+
+      margin-bottom: 5%;
+   }
+
+   .imageItemContainer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      img {
+         margin-bottom: 5px;
+         border-radius: 8px;
+         width: 100px;
+         height: 110px;
+      }
+   }
+}
+
+
+
+.options {
+   display: flex;
+   flex-direction: column;
+   width: 75%;
+   margin-top: 5%;
+   background-color: var(--cinza-escuro);
+   height: auto;
+   border-top-left-radius: 8px;
+   border-top-right-radius: 8px;
+   padding-bottom: 4%;
+   max-height: 30vh;
+
+   h4 {
+      cursor: pointer;
+      background: var(--laranja-main);
+      height: 5vh;
+      min-height: 35px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      transition: 0.2s;
+
+      &:hover {
+         background: rgb(190, 81, 13);
+      }
+
+
+   }
+
+   ul {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      padding-left: 0px;
+      overflow-y: auto;
+      justify-content: center;
+      align-items: flex-start;
+      padding-right: 10px;
+
+
+      li {
+         width: 75%;
+         background-color: #d1d0d0;
+         margin-top: 3%;
+         line-height: 40px;
+         display: flex;
+         align-items: center;
+         justify-content: flex-start;
+         padding-left: 5%;
+         border-radius: 8px;
+         color: var(--laranja-main);
+         transition: 0.2s;
+         cursor: pointer;
+
+         &:hover {
+            background-color: #282828;
+         }
+      }
+
+      .newItemsContainer {
+         position: relative;
+         display: flex;
+         flex-direction: row;
+         align-items: center;
+         justify-content: center;
+         width: 100%;
+         padding: 0;
+         height: auto;
+
+         .deleteItem {
+            position: absolute;
+            right: 0;
+            background-color: rgb(213, 211, 211);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            top: 25%;
+
+            &:hover {
+               background-color: #191919;
+            }
+         }
+      }
+   }
+
+}
+
+.buttonContainerparent {
+   position: absolute;
+   width: 90%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   bottom: 8%;
+}

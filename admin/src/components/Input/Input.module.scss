@@ -1,0 +1,31 @@
+.inputContainer {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   width: 100%;
+   height: auto;
+   padding: 0;
+   margin: 0;
+
+   .input {
+      padding: 5px 10px 2px 20px;
+      background-color: rgba(181, 181, 181, 0.261);
+      width: 100%;
+      height: 40px;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      border-bottom: 1px solid var(--cinza-escuro);
+      color: #605E5E;
+      font-size: 16px;
+
+
+      &:focus {
+         outline: none;
+      }
+
+      &::placeholder {
+         color: #ababab;
+      }
+   }
+}
