@@ -33,7 +33,7 @@ export const productModel: ProductType = {
          id: v4(),
          name: "Escolha o pão",
          isRequired: false,
-         maximumQuantity: "1",
+         maximumQuantity: "3",
          items: [
             {
                id: v4(),
@@ -56,7 +56,7 @@ export const productModel: ProductType = {
          id: v4(),
          name: "Escolha o molho",
          isRequired: true,
-         maximumQuantity: "",
+         maximumQuantity: "5",
          items: [
             {
                id: v4(),

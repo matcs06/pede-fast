@@ -1,5 +1,5 @@
 import { HiOutlineShoppingCart } from "react-icons/hi"
-
+import { BRLReais } from "@/utils/currencyFormat"
 export default function CartButton({ children, numberOfItems = 1, cartValue = "24" }) {
    return (
       <div className="flex w-3/4 max-w-md bg-secondary-orange h-11 cursor-pointer text-primary-bk font-medium items-center justify-around bottom-3 rounded-md shadow-lg">
@@ -9,7 +9,7 @@ export default function CartButton({ children, numberOfItems = 1, cartValue = "2
          </div>
          {children}
          <div>
-            <p className="text-sm font-bold rounded-full">R${cartValue}</p>
+            <p className="text-sm font-bold rounded-full">{BRLReais.format(Number(cartValue))}</p>
          </div>
 
       </div>

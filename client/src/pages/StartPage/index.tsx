@@ -1,6 +1,7 @@
 import CartButton from "../components/CartButton"
 import AddRemove from "../components/AddRemove"
 import Image from "next/image";
+import { BRLReais } from "../../utils/currencyFormat"
 interface OptionsItems {
    name: string;
    id: string;
@@ -41,7 +42,7 @@ export default function Test() {
                <div className="px-5 w-3/4">
                   <p className="text-dark-gray font-bold mb-2 ">Mousse de Chocolate</p>
                   <p className="text-justify font-light text-sm">Delicioso Mousse de Chocolate com raspas de chocolate e limão, feito com 50% cacau. 220 ml.</p>
-                  <p className="mt-3 text-light-gree text-sm">Por apenas: <b> 12,00 R$</b></p>
+                  <p className="mt-3 text-light-gree text-sm">Por apenas: <b> {BRLReais.format(12)}</b></p>
                </div>
                <Image width={130} height={120} src="/test2.png" alt="image-produto" className="rounded-lg mt-1" />
             </div>

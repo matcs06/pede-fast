@@ -18,14 +18,17 @@ export default function ItemDetail() {
 
 
 
-   const [itemQuantiy, setItemQuantity] = useState(1)
+   const [productQuantiy, setProductQuantity] = useState(1)
    const [productOptions, setProductOptions] = useState<ProductOrderOptions[]>([])
    let productPrice = 12
 
 
-   let optionsTotal = productOptions.reduce((total, option) => total + option.optionPrice, 0)
-   productPrice = itemQuantiy * productPrice + optionsTotal
-   let allowUpdate = itemQuantiy > 0 ? true : false;
+   let optionsTotalPrice = productOptions.reduce((total, option) => total + option.optionPrice, 0)
+   productPrice = (productQuantiy * productPrice) + optionsTotalPrice
+
+   let allowAddMore = productQuantiy > 0 ? true : false
+
+   console.log(productOptions)
 
    const onUpdate = (
       quantity: number,
@@ -35,14 +38,17 @@ export default function ItemDetail() {
       optionPrice: string,
       optionMaxQuantity: string) => {
 
+      /* Increase top product quantity */
       if (addType == "big") {
-         setItemQuantity(quantity)
+         setProductQuantity(quantity)
       }
-
-      if (optionName !== "main" && itemQuantiy > 0) {
+      /* Logic to haandle the choosed options that are stored inside productOptions state */
+      if (optionName !== "main" && productQuantiy > 0) {
 
          let newOption = { optionTitle, optionName, optionPrice: Number(optionPrice), optionQuantity: Number(quantity) }
+         /* Flag to control if newOption already exists in productOption array */
          let newOptionExists = false
+
          const filteredOptions = productOptions.filter((options) => {
 
             if (options.optionTitle == newOption.optionTitle && options.optionName == newOption.optionName) {
@@ -54,15 +60,27 @@ export default function ItemDetail() {
             return options.optionPrice > 0 && options
 
          })
-
-         const updatedProducts = filteredOptions
-
+         /* Only add newOption if it doesn`t already exists in the array */
          if (!newOptionExists) {
-            updatedProducts.push(newOption)
+            filteredOptions.push(newOption)
          }
 
-         setProductOptions([...updatedProducts])
+         /* Logic to avoid adding more items to the array when the maximum quantity is reached*/
+         const quantityByOption = filteredOptions.reduce((totalQuantity, option) => {
+            if (option.optionTitle === optionTitle) {
+               totalQuantity = totalQuantity + option.optionQuantity
+            }
+            return totalQuantity
+         }, 0)
+         allowAddMore = quantityByOption > Number(optionMaxQuantity) ? false : true
+
+         if (allowAddMore) {
+            setProductOptions(filteredOptions)
+         }
+
       }
+
+      return allowAddMore
    }
 
 
@@ -104,11 +122,10 @@ export default function ItemDetail() {
                            <div className="absolute right-1 top-2">
 
                               <AddRemove optionTitle={productOptions.name}
-                                 allowUpdate={allowUpdate}
+                                 onUpdate={onUpdate}
                                  optionName={optionItems.name}
                                  optionPrice={optionItems.value}
                                  optionMaxQuantity={productOptions.maximumQuantity}
-                                 onUpdate={onUpdate}
                                  optionStyle="small" />
                            </div>
                         </div>
@@ -125,7 +142,7 @@ export default function ItemDetail() {
 
          <div className="absolute bottom-3 flex flex-row w-full justify-around ">
             <AddRemove optionName={"main"} quantity={1} onUpdate={onUpdate} />
-            <UpdateCart updatedValue={productPrice}>{itemQuantiy > 0 ? "Atualizar" : "Remover"}</UpdateCart>
+            <UpdateCart updatedValue={productPrice}>{productQuantiy > 0 ? "Atualizar" : "Remover"}</UpdateCart>
          </div>
       </div>
    )
