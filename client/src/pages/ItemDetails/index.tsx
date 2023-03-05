@@ -2,112 +2,69 @@ import Image from "next/image"
 import AddRemove from "../components/AddRemove"
 import UpdateCart from "../components/UpdateCart";
 import { v4 } from "uuid"
+import { productModel } from "./productModel"
+import { useState } from "react";
 
-interface OptionsItems {
-   name: string;
-   id: string;
-   value: string
-}
+import { BRLReais } from "../../utils/currencyFormat"
 
-interface CreatedOptionType {
-   id: string,
-   name: string,
-   isRequired: boolean,
-   maximumQuantity: string,
-   items: OptionsItems[]
-}
-
-interface ProductType {
-   name: string,
-   description: string,
-   price: string,
-   quantity: string,
-   image_url: string,
-   options: CreatedOptionType[]
-
+interface ProductOrderOptions {
+   optionTitle: string,
+   optionName: string,
+   optionPrice: number,
+   optionQuantity: number
 }
 
 export default function ItemDetail() {
 
-   const productModel: ProductType = {
-      name: "Mousse de chocolate",
-      description: "Delicioso mousse de chocolate com raspas de limão. 220ml",
-      image_url: "/test2.png",
-      price: "12,00",
-      options: [
-         {
-            id: v4(),
-            name: "Escolha o pão",
-            isRequired: false,
-            maximumQuantity: "0",
-            items: [
-               {
-                  id: v4(),
-                  name: "frances",
-                  value: ""
-               },
-               {
-                  id: v4(),
-                  name: "italiano",
-                  value: "2,00"
-               },
-               {
-                  id: v4(),
-                  name: "4 queijos",
-                  value: "2,00"
-               }
-            ]
-         },
-         {
-            id: v4(),
-            name: "Escolha o molho",
-            isRequired: true,
-            maximumQuantity: "0",
-            items: [
-               {
-                  id: v4(),
-                  name: "barbecue",
-                  value: "2,00"
-               },
-               {
-                  id: v4(),
-                  name: "branco",
-                  value: "2,00"
-               },
-               {
-                  id: v4(),
-                  name: "special",
-                  value: "2,00"
-               }
-            ]
-         },
-         {
-            id: v4(),
-            name: "Escolha o molho",
-            isRequired: true,
-            maximumQuantity: "0",
-            items: [
-               {
-                  id: v4(),
-                  name: "barbecue",
-                  value: "2,00"
-               },
-               {
-                  id: v4(),
-                  name: "branco",
-                  value: "2,00"
-               },
-               {
-                  id: v4(),
-                  name: "special",
-                  value: "2,00"
-               }
-            ]
+
+
+   const [itemQuantiy, setItemQuantity] = useState(1)
+   const [productOptions, setProductOptions] = useState<ProductOrderOptions[]>([])
+   let productPrice = 12
+
+
+   let optionsTotal = productOptions.reduce((total, option) => total + option.optionPrice, 0)
+   productPrice = itemQuantiy * productPrice + optionsTotal
+   let allowUpdate = itemQuantiy > 0 ? true : false;
+
+   const onUpdate = (
+      quantity: number,
+      addType: string,
+      optionTitle: string,
+      optionName: string,
+      optionPrice: string,
+      optionMaxQuantity: string) => {
+
+      if (addType == "big") {
+         setItemQuantity(quantity)
+      }
+
+      if (optionName !== "main" && itemQuantiy > 0) {
+
+         let newOption = { optionTitle, optionName, optionPrice: Number(optionPrice), optionQuantity: Number(quantity) }
+         let newOptionExists = false
+         const filteredOptions = productOptions.filter((options) => {
+
+            if (options.optionTitle == newOption.optionTitle && options.optionName == newOption.optionName) {
+               options.optionPrice = Number(optionPrice) * quantity
+               options.optionQuantity = quantity
+               newOptionExists = true
+            }
+
+            return options.optionPrice > 0 && options
+
+         })
+
+         const updatedProducts = filteredOptions
+
+         if (!newOptionExists) {
+            updatedProducts.push(newOption)
          }
 
-      ],
-      quantity: "12"
+         setProductOptions([...updatedProducts])
+      }
    }
+
 
    return (
       <div className="flex flex-col items-center min-h-phoneHeigth relative w-full ">
@@ -130,17 +87,29 @@ export default function ItemDetail() {
                   <div className="w-full flex flex-col items-center h-full " key={productOptions.id}>
                      <div key={productOptions.id} className="flex bg-light-gray w-4/5 h-11 min-h px-4 rounded-lg items-center justify-between mt-5 ">
                         <p className="text-sm select-none text-secondary-orange ">{productOptions.name}</p>
-                        <p className="text-xs select-none bg-secondary-orange h-1/2 w-1/4 rounded-md flex items-center justify-center text-primary-bk">{productOptions.isRequired ? "obrigatório" : "opicional"}  </p>
+                        {productOptions.isRequired ? (
+                           <p className="text-xs select-none bg-secondary-orange h-1/2 w-1/4 rounded-md flex items-center justify-center text-primary-bk">obrigatório </p>
+                        ) : (
+                           <p className="text-xs select-none bg-green h-1/2 w-1/4 rounded-md flex items-center justify-center text-primary-bk">opicional</p>
+
+                        )}
+
                      </div>
                      {productOptions.items.map((optionItems) => (
                         <div key={optionItems.id} className="flex mt-2 w-3/4 h-11 px-1 relative  border-b-b-1/5 border-b-light-gray-2">
                            <div className="flex flex-col justify-center">
                               <p className="text-dark-gray text-sm font-normal select-none">{optionItems.name}</p>
-                              {Number(optionItems.value[0]) > 0 && <p className="text-xs font-normal mb-1 select-none text-secondary-orange">R$ {optionItems.value}</p>}
+                              {Number(optionItems.value) > 0 && <p className="text-xs font-normal mb-1 select-none text-secondary-orange">{BRLReais.format(Number(optionItems.value))}</p>}
                            </div>
                            <div className="absolute right-1 top-2">
 
-                              <AddRemove quantity={0} setQuantity={() => { }} optionStyle="small" />
+                              <AddRemove optionTitle={productOptions.name}
+                                 allowUpdate={allowUpdate}
+                                 optionName={optionItems.name}
+                                 optionPrice={optionItems.value}
+                                 optionMaxQuantity={productOptions.maximumQuantity}
+                                 onUpdate={onUpdate}
+                                 optionStyle="small" />
                            </div>
                         </div>
                      ))}
@@ -155,8 +124,8 @@ export default function ItemDetail() {
 
 
          <div className="absolute bottom-3 flex flex-row w-full justify-around ">
-            <AddRemove quantity={0} setQuantity={() => { }} />
-            <UpdateCart updatedValue={12}>Atualizar</UpdateCart>
+            <AddRemove optionName={"main"} quantity={1} onUpdate={onUpdate} />
+            <UpdateCart updatedValue={productPrice}>{itemQuantiy > 0 ? "Atualizar" : "Remover"}</UpdateCart>
          </div>
       </div>
    )

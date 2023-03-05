@@ -1,6 +1,6 @@
 import CartButton from "../components/CartButton"
 import AddRemove from "../components/AddRemove"
-
+import Image from "next/image";
 interface OptionsItems {
    name: string;
    id: string;
@@ -43,7 +43,7 @@ export default function Test() {
                   <p className="text-justify font-light text-sm">Delicioso Mousse de Chocolate com raspas de chocolate e limão, feito com 50% cacau. 220 ml.</p>
                   <p className="mt-3 text-light-gree text-sm">Por apenas: <b> 12,00 R$</b></p>
                </div>
-               <img src="./test2.png" alt="image-produto" className="rounded-lg w-28 h-28 mt-1" />
+               <Image width={130} height={120} src="/test2.png" alt="image-produto" className="rounded-lg mt-1" />
             </div>
 
          </div>
