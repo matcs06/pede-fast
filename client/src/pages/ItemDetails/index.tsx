@@ -3,7 +3,7 @@ import AddRemove from "../components/AddRemove"
 import UpdateCart from "../components/UpdateCart";
 import { v4 } from "uuid"
 import { productModel } from "./productModel"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { BRLReais } from "../../utils/currencyFormat"
 
@@ -26,24 +26,64 @@ export default function ItemDetail() {
    let optionsTotalPrice = productOptions.reduce((total, option) => total + option.optionPrice, 0)
    productPrice = (productQuantiy * productPrice) + optionsTotalPrice
 
-   let allowAddMore = productQuantiy > 0 ? true : false
-
    console.log(productOptions)
+   const [blockFrontEndAdd, setBlockFrontEndAdd] = useState({ option_title: "", block_option: false })
+   let blockMoreForOption
 
    const onUpdate = (
       quantity: number,
+      positiveOrNegative: "positive" | "negative",
       addType: string,
       optionTitle: string,
       optionName: string,
       optionPrice: string,
       optionMaxQuantity: string) => {
 
+      blockMoreForOption = { option_title: "", block_option: false }
+
       /* Increase top product quantity */
       if (addType == "big") {
          setProductQuantity(quantity)
+      } else {
+         const optionCurrentQuantity = productOptions.reduce((acc, prod) => {
+            if (quantity > 0 && positiveOrNegative === "positive") {
+
+               if (prod.optionTitle === optionTitle) {
+                  acc = acc + Number(prod.optionQuantity)
+               }
+            }
+
+            return acc
+         }, 1)
+
+         console.log(optionCurrentQuantity)
+
+
+         /* Control to add more in the plus option on the scree */
+         if (optionCurrentQuantity >= Number(optionMaxQuantity)) {
+            setBlockFrontEndAdd({ option_title: optionTitle, block_option: true })
+         } else {
+            setBlockFrontEndAdd({ option_title: optionTitle, block_option: false })
+         }
+
+         /* control to add more in the array of options */
+         if (optionCurrentQuantity > Number(optionMaxQuantity)) {
+            blockMoreForOption.block_option = true
+            blockMoreForOption.option_title = optionTitle
+         } else {
+            blockMoreForOption.block_option = false
+            blockMoreForOption.option_title = optionTitle
+         }
+
       }
+      let block = false;
+      if (optionTitle === blockMoreForOption.option_title && blockMoreForOption.block_option === true) {
+         block = true
+      }
+
       /* Logic to haandle the choosed options that are stored inside productOptions state */
-      if (optionName !== "main" && productQuantiy > 0) {
+      if ((optionName !== "main" && productQuantiy > 0 && !block)
+         || (quantity == 0 && optionName !== "main") || (quantity > 0 && positiveOrNegative == "negative")) {
 
          let newOption = { optionTitle, optionName, optionPrice: Number(optionPrice), optionQuantity: Number(quantity) }
          /* Flag to control if newOption already exists in productOption array */
@@ -56,33 +96,20 @@ export default function ItemDetail() {
                options.optionQuantity = quantity
                newOptionExists = true
             }
-
             return options.optionPrice > 0 && options
 
+
          })
+
          /* Only add newOption if it doesn`t already exists in the array */
          if (!newOptionExists) {
             filteredOptions.push(newOption)
          }
 
-         /* Logic to avoid adding more items to the array when the maximum quantity is reached*/
-         const quantityByOption = filteredOptions.reduce((totalQuantity, option) => {
-            if (option.optionTitle === optionTitle) {
-               totalQuantity = totalQuantity + option.optionQuantity
-            }
-            return totalQuantity
-         }, 0)
-         allowAddMore = quantityByOption > Number(optionMaxQuantity) ? false : true
-
-         if (allowAddMore) {
-            setProductOptions(filteredOptions)
-         }
+         setProductOptions(filteredOptions)
 
       }
-
-      return allowAddMore
    }
-
 
    return (
       <div className="flex flex-col items-center min-h-phoneHeigth relative w-full ">
@@ -126,7 +153,8 @@ export default function ItemDetail() {
                                  optionName={optionItems.name}
                                  optionPrice={optionItems.value}
                                  optionMaxQuantity={productOptions.maximumQuantity}
-                                 optionStyle="small" />
+                                 optionStyle="small"
+                                 blockOption={blockFrontEndAdd} />
                            </div>
                         </div>
                      ))}
@@ -141,7 +169,7 @@ export default function ItemDetail() {
 
 
          <div className="absolute bottom-3 flex flex-row w-full justify-around ">
-            <AddRemove optionName={"main"} quantity={1} onUpdate={onUpdate} />
+            <AddRemove optionName="main" quantity={1} onUpdate={onUpdate} />
             <UpdateCart updatedValue={productPrice}>{productQuantiy > 0 ? "Atualizar" : "Remover"}</UpdateCart>
          </div>
       </div>
