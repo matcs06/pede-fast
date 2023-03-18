@@ -25,7 +25,6 @@ export default function ItemDetail(productModel: IProductType) {
    const [blockFrontEndAdd, setBlockFrontEndAdd] = useState({ option_title: "", block_option: false })
    let blockMoreForOption
 
-   console.log(cartContext)
 
    function saveToCartContext() {
       const newProduct: IOrderProducts = {
