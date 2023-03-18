@@ -2,30 +2,29 @@ import CartButton from "../components/CartButton"
 import AddRemove from "../components/AddRemove"
 import Image from "next/image";
 import { BRLReais } from "../../utils/currencyFormat"
-interface OptionsItems {
-   name: string;
-   id: string;
-   value: string
-}
+import { AiFillCloseCircle } from "react-icons/ai"
+import ItemDetail from "../ItemDetails";
 
-interface CreatedOptionType {
-   id: string,
-   name: string,
-   isRequired: boolean,
-   maximumQuantity: string,
-   items: OptionsItems[]
-}
+import { productModel } from "./productModel"
+import { useState } from "react";
+import { useCartContext } from "@/context/Context";
 
-interface ProductType {
-   name: string,
-   description: string,
-   price: string,
-   quantity: string,
-   image_url: string,
-   options: CreatedOptionType[]
+import { ProductType, IOrderProducts } from "./types";
 
-}
 export default function Test() {
+
+   const [myCart,] = useCartContext()
+
+   const [showItemDetails, setShowItemDetails] = useState(false)
+   const [passedProduct, setPassedProduct] = useState<ProductType>()
+
+   const cartTotalValue = myCart.reduce((acc: number, cart: IOrderProducts) => acc + cart.productOrderPrice, 0)
+
+   function OnClickProduct(product: ProductType) {
+      setShowItemDetails(true)
+      setPassedProduct(product)
+   }
+
    return (
       <div className="flex relative flex-col items-center text-dark-gray min-h-phoneHeigth">
          <header className="bg-secondary-orange h-28 w-full">
@@ -38,18 +37,44 @@ export default function Test() {
             </div>
          </div>
          <div className="mt-24 h-full w-full flex flex-col justify-center items-center">
-            <div className="flex  flex-row max-w-md border-b-b-1/5 border-b-light-gray-2 mb-2  cursor-pointer w-full py-3 px-2 select-none" >
-               <div className="px-5 w-3/4">
-                  <p className="text-dark-gray font-bold mb-2 ">Mousse de Chocolate</p>
-                  <p className="text-justify font-light text-sm">Delicioso Mousse de Chocolate com raspas de chocolate e limão, feito com 50% cacau. 220 ml.</p>
-                  <p className="mt-3 text-light-gree text-sm">Por apenas: <b> {BRLReais.format(12)}</b></p>
-               </div>
-               <Image width={130} height={120} src="/test2.png" alt="image-produto" className="rounded-lg mt-1" />
-            </div>
 
+            {productModel.map((product) => {
+               return (
+                  <div key={product.name} className="flex  flex-row max-w-md border-b-b-1/5 border-b-light-gray-2 mb-2  cursor-pointer w-full py-3 px-2 select-none" onClick={() => { OnClickProduct(product) }}>
+                     <div className="px-5 w-3/4">
+                        <p className="text-dark-gray font-bold mb-2 ">{product.name}</p>
+                        <p className="text-justify font-light text-sm">{product.description}</p>
+                        <p className="mt-3 text-light-gree text-sm">Por apenas: <b> {BRLReais.format(Number(product.price))}</b></p>
+                     </div>
+                     <Image width={130} height={120} src="/test2.png" alt="image-produto" className="rounded-lg mt-1" />
+                  </div>
+
+
+               )
+
+            })}
+
+            {
+               showItemDetails && (
+                  <div className="absolute bg-primary-bk top-0 z-10 flex flex-col items-center min-h-phoneHeigth w-full">
+                     <div className="flex h-8 w-8 absolute top-1 right-2 cursor-pointer z-20" onClick={() => { setShowItemDetails(false) }}>
+                        <AiFillCloseCircle size={30} />
+                     </div>
+                     <ItemDetail
+                        name={passedProduct?.name}
+                        description={passedProduct?.description}
+                        image_url={passedProduct?.image_url}
+                        price={passedProduct?.price}
+                        options={passedProduct?.options}
+                        quantity={passedProduct?.quantity}
+                     />
+                  </div>
+               )
+            }
          </div>
+
          <div className="flex w-full justify-center absolute bottom-3">
-            <CartButton>Continuar</CartButton>
+            <CartButton numberOfItems={myCart.length} cartValue={cartTotalValue}>Continuar</CartButton>
          </div>
 
       </div>

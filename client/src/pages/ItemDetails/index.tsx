@@ -1,34 +1,45 @@
 import Image from "next/image"
 import AddRemove from "../components/AddRemove"
 import UpdateCart from "../components/UpdateCart";
+import { useState } from "react";
 import { v4 } from "uuid"
-import { productModel } from "./productModel"
-import { useEffect, useState } from "react";
 
 import { BRLReais } from "../../utils/currencyFormat"
+import { useCartContext } from "@/context/Context";
 
-interface ProductOrderOptions {
-   optionTitle: string,
-   optionName: string,
-   optionPrice: number,
-   optionQuantity: number
-}
 
-export default function ItemDetail() {
+import { IOrderProducts, IProductType, ProductOrderOptions } from "./types";
 
+
+export default function ItemDetail(productModel: IProductType) {
+   const [cartContext, setCartContext] = useCartContext()
 
 
    const [productQuantiy, setProductQuantity] = useState(1)
    const [productOptions, setProductOptions] = useState<ProductOrderOptions[]>([])
-   let productPrice = 12
-
+   let productPrice = Number(productModel.price)
 
    let optionsTotalPrice = productOptions.reduce((total, option) => total + option.optionPrice, 0)
    productPrice = (productQuantiy * productPrice) + optionsTotalPrice
 
-   console.log(productOptions)
    const [blockFrontEndAdd, setBlockFrontEndAdd] = useState({ option_title: "", block_option: false })
    let blockMoreForOption
+
+   console.log(cartContext)
+
+   function saveToCartContext() {
+      const newProduct: IOrderProducts = {
+         id: v4(),
+         productName: productModel.name,
+         productQuantity: productQuantiy,
+         productOrderPrice: productPrice,
+         product_image_url: productModel.image_url,
+         options: productOptions
+      }
+
+      setCartContext(newProduct, "add")
+
+   }
 
    const onUpdate = (
       quantity: number,
@@ -55,9 +66,6 @@ export default function ItemDetail() {
 
             return acc
          }, 1)
-
-         console.log(optionCurrentQuantity)
-
 
          /* Control to add more in the plus option on the scree */
          if (optionCurrentQuantity >= Number(optionMaxQuantity)) {
@@ -127,7 +135,7 @@ export default function ItemDetail() {
 
          </div>
          <div className="flex w-full items-center flex-col overflow-scroll max-h-80">
-            {productModel.options.map((productOptions) => {
+            {productModel.options?.map((productOptions) => {
                return (
                   <div className="w-full flex flex-col items-center h-full " key={productOptions.id}>
                      <div key={productOptions.id} className="flex bg-light-gray w-4/5 h-11 min-h px-4 rounded-lg items-center justify-between mt-5 ">
@@ -163,14 +171,12 @@ export default function ItemDetail() {
 
             })}
 
-
-
          </div>
 
 
          <div className="absolute bottom-3 flex flex-row w-full justify-around ">
             <AddRemove optionName="main" quantity={1} onUpdate={onUpdate} />
-            <UpdateCart updatedValue={productPrice}>{productQuantiy > 0 ? "Atualizar" : "Remover"}</UpdateCart>
+            <UpdateCart onClick={saveToCartContext} updatedValue={productPrice}>{productQuantiy > 0 ? "Adicionar" : "Remover"}</UpdateCart>
          </div>
       </div>
    )
