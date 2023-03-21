@@ -1,9 +1,11 @@
-import CartButton from "../components/CartButton"
-import AddRemove from "../components/AddRemove"
+import CartButton from "../../components/CartButton"
+import AddRemove from "../../components/AddRemove"
 import Image from "next/image";
 import { BRLReais } from "../../utils/currencyFormat"
 import { AiFillCloseCircle } from "react-icons/ai"
 import ItemDetail from "../ItemDetails";
+import { useRouter } from 'next/navigation';
+
 
 import { productModel } from "./productModel"
 import { useState } from "react";
@@ -13,6 +15,7 @@ import { ProductType, IOrderProducts } from "./types";
 
 export default function Test() {
 
+   const { push } = useRouter();
    const [myCart,] = useCartContext()
 
    const [showItemDetails, setShowItemDetails] = useState(false)
@@ -67,15 +70,19 @@ export default function Test() {
                         price={passedProduct?.price}
                         options={passedProduct?.options}
                         quantity={passedProduct?.quantity}
+                        setShowSelf={setShowItemDetails}
                      />
                   </div>
                )
             }
          </div>
 
-         <div className="flex w-full justify-center absolute bottom-3">
-            <CartButton numberOfItems={myCart.length} cartValue={cartTotalValue}>Continuar</CartButton>
-         </div>
+         {myCart.length > 0 && (
+            <div className="flex w-full justify-center absolute bottom-3 select-none">
+               <CartButton onClick={() => { push("/Cart") }} numberOfItems={myCart.length} cartValue={cartTotalValue}>Continuar</CartButton>
+            </div>
+         )}
+
 
       </div>
    )

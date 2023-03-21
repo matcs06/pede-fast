@@ -1,8 +1,8 @@
 import { HiOutlineShoppingCart } from "react-icons/hi"
 import { BRLReais } from "@/utils/currencyFormat"
-export default function CartButton({ children = "", numberOfItems = 0, cartValue = "24" }) {
+export default function CartButton({ children = "", numberOfItems = 0, cartValue = "24", ...props }) {
    return (
-      <div className="flex w-3/4 max-w-md bg-secondary-orange h-11 cursor-pointer text-primary-bk font-medium items-center justify-evenly bottom-3 rounded-md shadow-lg">
+      <div onClick={props.onClick} className="flex w-3/4 max-w-md select-none bg-secondary-orange h-11 cursor-pointer text-primary-bk font-medium items-center justify-evenly bottom-3 rounded-md shadow-lg">
          {numberOfItems > 0 && (
             <div className="flex animate-bounce relative w-8 anima ">
                <HiOutlineShoppingCart size={20} />

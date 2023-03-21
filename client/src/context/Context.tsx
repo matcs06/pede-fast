@@ -1,23 +1,8 @@
 import { useContext, createContext, useState } from "react";
-
-interface ChoosedOptions {
-   optionTitle: string,
-   optionName: string,
-   optionQuantity: number,
-   optionPrice: number
-}
-
-interface IOrderProducts {
-   id: string;
-   productName: string,
-   productQuantity: number,
-   productOrderPrice: number,
-   product_image_url?: string,
-   options?: ChoosedOptions[]
-}
+import { IOrderProducts } from "./types";
 
 export const CartContext = createContext([]) as any
-
+export const SubTractOrAdd = createContext([]) as any
 
 export function useCartContext(): any {
    return useContext(CartContext)
@@ -46,9 +31,17 @@ export function MyCartContextWrapper({ children }: any) {
 
    }
 
+   function subtractOrAdd(id: string, add_or_remove: "add" | "remove") {
+
+
+   }
+
    return (
       <CartContext.Provider value={[myCart, updateCart]}>
-         {children}
+         <SubTractOrAdd.Provider value={subtractOrAdd}>
+            {children}
+         </SubTractOrAdd.Provider>
+
       </CartContext.Provider>
    )
 

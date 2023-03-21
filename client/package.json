@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "mobile-link": "node ./node_modules/openmobile/ip.js"
+    "openmobile": "node ./node_modules/openmobile/ip.js"
   },
   "dependencies": {
     "@next/font": "13.1.6",

@@ -35,6 +35,7 @@ export interface IProductType {
    quantity?: string,
    image_url?: string,
    options?: CreatedOptionType[]
+   setShowSelf: Function
 
 }
 

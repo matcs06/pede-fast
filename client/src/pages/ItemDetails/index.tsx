@@ -1,6 +1,7 @@
 import Image from "next/image"
-import AddRemove from "../components/AddRemove"
-import UpdateCart from "../components/UpdateCart";
+import { useRouter } from 'next/router'
+import AddRemove from "../../components/AddRemove"
+import UpdateCart from "../../components/UpdateCart";
 import { useState } from "react";
 import { v4 } from "uuid"
 
@@ -12,9 +13,10 @@ import { IOrderProducts, IProductType, ProductOrderOptions } from "./types";
 
 
 export default function ItemDetail(productModel: IProductType) {
-   const [cartContext, setCartContext] = useCartContext()
+   const router = useRouter()
 
 
+   const [_, setCartContext] = useCartContext()
    const [productQuantiy, setProductQuantity] = useState(1)
    const [productOptions, setProductOptions] = useState<ProductOrderOptions[]>([])
    let productPrice = Number(productModel.price)
@@ -37,6 +39,9 @@ export default function ItemDetail(productModel: IProductType) {
       }
 
       setCartContext(newProduct, "add")
+
+      /* Closing item detail*/
+      productModel.setShowSelf(false)
 
    }
 
