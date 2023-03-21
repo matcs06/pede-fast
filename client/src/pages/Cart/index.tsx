@@ -1,4 +1,4 @@
-import { useCartContext } from "@/context/Context"
+import { SubTractOrAdd, useCartContext, useSubTractOrAdd } from "@/context/Context"
 import { BRLReais } from "@/utils/currencyFormat"
 import Image from "next/image"
 import { IOrderProducts } from "./types"
@@ -8,7 +8,7 @@ import { AiFillPlusCircle, AiFillMinusCircle } from "react-icons/ai"
 
 export default function Cart() {
    const [cartContent, updateCartContent] = useCartContext()
-
+   const AddOrRemove = useSubTractOrAdd()
    return (
       <div className="flex items-center mt-3 flex-col min-h-phoneHeigth">
          <h3 className="font-normal text-lg text-secondary-orange my-4">Minha sacola</h3>
@@ -28,8 +28,8 @@ export default function Cart() {
                         <p className="absolute bottom-2 w-full">Subtotal: {BRLReais.format(carItem.productOrderPrice)}</p>
                      </div>
                      <div className="absolute right-2 h-20 w-7 top-4 flex flex-col justify-between select-none ">
-                        <AiFillPlusCircle className="text-secondary-orange cursor-pointer transition duration-300 ease-in-out hover:opacity-80" size={28} />
-                        <AiFillMinusCircle className="text-secondary-orange cursor-pointer transition duration-300 ease-in-out hover:opacity-80" size={28} />
+                        <AiFillPlusCircle className="text-secondary-orange cursor-pointer transition duration-300 ease-in-out hover:opacity-80" size={28} onClick={() => AddOrRemove(carItem.id, "add")} />
+                        <AiFillMinusCircle className="text-secondary-orange cursor-pointer transition duration-300 ease-in-out hover:opacity-80" size={28} onClick={() => AddOrRemove(carItem.id, "remove")} />
                      </div>
                   </div>
                )

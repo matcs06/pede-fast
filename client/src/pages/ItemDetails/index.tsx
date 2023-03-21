@@ -34,11 +34,14 @@ export default function ItemDetail(productModel: IProductType) {
          productName: productModel.name,
          productQuantity: productQuantiy,
          productOrderPrice: productPrice,
+         productOriginalPrice: productPrice,
          product_image_url: productModel.image_url,
          options: productOptions
       }
+      if (productQuantiy > 0) {
+         setCartContext(newProduct, "add")
+      }
 
-      setCartContext(newProduct, "add")
 
       /* Closing item detail*/
       productModel.setShowSelf(false)
@@ -180,7 +183,7 @@ export default function ItemDetail(productModel: IProductType) {
 
          <div className="absolute bottom-3 flex flex-row w-full justify-around ">
             <AddRemove optionName="main" quantity={1} onUpdate={onUpdate} />
-            <UpdateCart onClick={saveToCartContext} updatedValue={productPrice}>{productQuantiy > 0 ? "Adicionar" : "Remover"}</UpdateCart>
+            <UpdateCart onClick={saveToCartContext} updatedValue={productPrice}>{productQuantiy > 0 ? "Adicionar" : "Voltar"}</UpdateCart>
          </div>
       </div>
    )
