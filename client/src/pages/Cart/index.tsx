@@ -42,7 +42,7 @@ export default function Cart() {
             })}
 
             <div className="flex flex-col w-full items-center absolute bottom-1 h-24 justify-between">
-               <CartButton onClick={() => { push("/StartPage") }}>Ver cardápio</CartButton>
+               <CartButton onClick={() => { push("/StartPage") }}>Voltar ao cardápio</CartButton>
 
                <CartButton onClick={() => { push("/CustomerInfo") }} numberOfItems={cartContent.length} cartValue={cartTotalValue}>Continuar</CartButton>
             </div>
