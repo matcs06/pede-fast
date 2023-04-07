@@ -17,7 +17,7 @@ export default function Cart() {
 
    return (
       <div className="flex items-center mt-3 flex-col min-h-phoneHeigth">
-         <h3 className="font-normal text-lg text-secondary-orange my-4">Minha sacola</h3>
+         <h3 className="font-normal select-none text-lg text-secondary-orange my-4">Minha sacola</h3>
          <main className="flex flex-col w-full items-center h-full">
             {cartContent.map((carItem: IOrderProducts) => {
                return (
@@ -41,10 +41,12 @@ export default function Cart() {
                )
             })}
 
-            <div className="flex flex-col w-full items-center absolute bottom-1 h-24 justify-between">
+            <div className="flex flex-col w-full items-center absolute bottom-5 h-24 justify-between">
                <CartButton onClick={() => { push("/StartPage") }}>Voltar ao cardápio</CartButton>
+               {cartTotalValue > 0 && (
+                  <CartButton onClick={() => { push("/CustomerInfo") }} numberOfItems={cartContent.length} cartValue={cartTotalValue}>Continuar</CartButton>
 
-               <CartButton onClick={() => { push("/CustomerInfo") }} numberOfItems={cartContent.length} cartValue={cartTotalValue}>Continuar</CartButton>
+               )}
             </div>
 
          </main>

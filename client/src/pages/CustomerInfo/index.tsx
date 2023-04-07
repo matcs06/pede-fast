@@ -1,15 +1,20 @@
 import CartButton from "@/components/CartButton"
 import Input from "@/components/Input"
 import PhoneInput from "@/components/PhoneInput";
+import { useCartContext } from "@/context/Context";
+import { BRLReais } from "@/utils/currencyFormat";
 import IsNumber from "@/utils/isNumber";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { GrLocation } from "react-icons/gr"
+import { FormatMessage } from "./formatWppMesssage";
+import { IOrderProducts } from "./types";
+
 
 export default function CustomerInfo() {
 
    const { push } = useRouter();
-
+   const [cartContent, setCartContent] = useCartContext()
 
    const [customerName, setCustomerName] = useState("")
    const [customerPhone, setCustomerPhone] = useState("")
@@ -19,11 +24,16 @@ export default function CustomerInfo() {
 
    const [getLocation, setGetLocation] = useState(false)
 
+   const cartTotalValue = cartContent.reduce((acc: number, cart: IOrderProducts) => acc + cart.productOrderPrice, 0)
+
+
    async function getCurrentLocation() {
       setGetLocation(true)
-      navigator.geolocation.getCurrentPosition(location => {
+      await navigator.geolocation.getCurrentPosition(location => {
          setLocation(location)
       })
+
+
    }
 
    function sendMessage() {
@@ -48,9 +58,19 @@ export default function CustomerInfo() {
          localStorage.setItem("customer_info", JSON.stringify(customerInfo))
 
 
-         const link = `https://www.google.com/maps?q=${location?.coords.latitude},${location?.coords.longitude}&z=17&hl=pt-BR`
+         const locationLink = location?.coords.latitude ? `https://www.google.com/maps?q=${location?.coords.latitude},${location?.coords.longitude}&z=17&hl=pt-BR` : ""
 
-         const wpplink = `https://wa.me/+5511959842539?text=${link}`
+         const customerInfoMessage = `Nome: ${customerName}\nContato: ${customerPhone}\n\n`
+         const cartMessage: IOrderProducts[] = cartContent
+         const totalOrderPrice = "\n*Total: " + BRLReais.format(cartTotalValue) + "*\n"
+         const deliveryInformation = "\nEndereço de Entrega: \n" + customerAddress + "\nComplemento: " + addressExtraInfo
+
+
+         let formatedOrder = customerInfoMessage + FormatMessage(cartMessage) + totalOrderPrice + deliveryInformation + "\n" + locationLink
+
+         formatedOrder = window.encodeURIComponent(formatedOrder)
+
+         const wpplink = `https://wa.me/+5511959842539?text=${formatedOrder}`
          window.open(wpplink)
 
       }
@@ -59,8 +79,8 @@ export default function CustomerInfo() {
    }
 
    return (
-      <div className="flex min-h-phoneHeigth flex-col w-full items-center py-8">
-         <h3 className="text-secondary-orange">Informacões da entrega</h3>
+      <div className="flex min-h-phoneHeigth flex-col w-full items-center py-8 select-none">
+         <h3 className="text-secondary-orange ">Informacões da entrega</h3>
          <main className="w-full flex flex-col items-center pt-9">
             <Input placeholder="Nome Completo" setValue={setCustomerName} />
             <PhoneInput placeholder="Número (WhatsApp)" setValue={setCustomerPhone} />
@@ -89,13 +109,13 @@ export default function CustomerInfo() {
                {getLocation ? (
                   <>
                      {location !== undefined ? (
-                        <CartButton onClick={sendMessage}>Enviar Pedido</CartButton>) : (
+                        <CartButton numberOfItems={cartContent.length} cartValue={cartTotalValue} onClick={sendMessage}>Enviar Pedido</CartButton>) : (
                         <CartButton onClick={() => { window.alert("Aguarde carregar a localizacao!") }} >Carregando...</CartButton>
 
                      )}
                   </>
                ) : (
-                  <CartButton onClick={sendMessage}>Enviar Pedido</CartButton>
+                  <CartButton onClick={sendMessage} numberOfItems={cartContent.length} cartValue={cartTotalValue}>Enviar Pedido</CartButton>
 
                )
 
