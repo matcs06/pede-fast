@@ -1,9 +1,9 @@
 
-import ProductList from "../../pages/admin/Product/ProductList/ProductList"
-import CreateProduct from "../../pages/admin/Product/CreateProduct/CreateProduct"
-import Delivery from "../../pages/admin/Delivery/Delivery"
+import ProductList from "../../pages/admin/app/Product/ProductList/ProductList"
+import CreateProduct from "../../pages/admin/app/Product/CreateProduct/CreateProduct"
+import Delivery from "../../pages/admin/app/Delivery/Delivery"
+import Store from "../../pages/admin/app/Store/Store"
 
-import { Store } from "../../pages/admin/Store/Store"
 import { IoStorefrontSharp } from "react-icons/io5"
 import { GrProductHunt } from "react-icons/gr"
 import { IoIosAddCircle } from "react-icons/io"

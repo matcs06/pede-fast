@@ -1,12 +1,12 @@
 import { useState } from "react";
-import Button from "../../../components/Button/Button";
-import Input from "../../../components/Input/Input";
+import Button from "../../../../components/Button/Button";
+import Input from "../../../../components/Input/Input";
 import styles from "./Store.module.scss"
 import { HexColorPicker } from "react-colorful";
 import ImageUploading from 'react-images-uploading';
 
 
-export function Store() {
+export default function Store() {
 
    const [storeName, setStoreName] = useState("")
    const [storeAddress, setSoreAddress] = useState("")

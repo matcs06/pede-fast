@@ -3,9 +3,9 @@ import { useState } from "react"
 import { BsFillArrowDownCircleFill } from "react-icons/bs"
 import { AiFillPlusCircle } from "react-icons/ai"
 
-import Input from "../../../components/Input/Input"
-import Button from "../../../components/Button/Button"
-import CheckBox from "../../../components/CheckBox/CheckBox"
+import Input from "../../../../components/Input/Input"
+import Button from "../../../../components/Button/Button"
+import CheckBox from "../../../../components/CheckBox/CheckBox"
 import Condition from "./Condition"
 
 export default function Delivery() {
@@ -73,7 +73,7 @@ export default function Delivery() {
                <div className={styles.bottomContainer}>
 
                   <div className={styles.parameterContainer}>
-                     <p>Valor: </p>
+                     <p>Parametro: </p>
                      <Input setFieldValue={setParameter} name={"parameter"} />
                   </div>
 

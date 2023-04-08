@@ -1,6 +1,6 @@
 import styles from "./Options.module.scss"
-import Input from "../../../../components/Input/Input"
-import Button from "../../../../components/Button/Button"
+import Input from "../../../../../components/Input/Input"
+import Button from "../../../../../components/Button/Button"
 import { AiOutlinePlusCircle } from "react-icons/ai"
 import { MdCancel } from "react-icons/md"
 import { useState } from "react"

@@ -1,7 +1,7 @@
 import { useState } from "react"
-import Input from "../../../../components/Input/Input"
+import Input from "../../../../../components/Input/Input"
 import styles from "./CreateProduct.module.scss"
-import Button from "../../../../components/Button/Button"
+import Button from "../../../../../components/Button/Button"
 import Options from "./Options"
 import { MdCancel } from "react-icons/md"
 
