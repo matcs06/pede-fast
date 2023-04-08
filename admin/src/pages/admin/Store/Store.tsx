@@ -38,11 +38,11 @@ export function Store() {
          <div className={styles.inputContainer}>
             <Input setFieldValue={setStoreName} placeholder={"Nome da Loja"} name={"store name"} />
             <Input setFieldValue={setSoreAddress} placeholder={"Endereço"} name={"store address"} />
-            <div className={styles.chooseColorContainer}>
+            {/* <div className={styles.chooseColorContainer}>
                <p>Cor secundária:</p>
                <Input onClick={() => setShowPicker(true)} value={bannerCollor} setFieldValue={() => { }} placeholder={"Cor do banner"} name={"banner collor"} />
 
-            </div>
+            </div> */}
             <div className={styles.statusContainer}>
                <p>Status: </p>
                <ul >
@@ -55,13 +55,13 @@ export function Store() {
 
                </ul>
             </div>
-            {showPicker && (
+            {/*      {showPicker && (
                <div className={styles.colorPicker}>
 
                   <HexColorPicker onMouseLeave={() => setShowPicker(false)} hidden={showPicker} color={bannerCollor} onChange={setBannerCollor} />
                </div>
 
-            )}
+            )} */}
          </div>
          <div className={styles.imageUploadContainer}>
             <ImageUploading
@@ -93,7 +93,7 @@ export function Store() {
                      &nbsp;
                      {imageList.map((image, index) => (
                         <div key={index} className={styles.imageItemContainer}>
-                           <img src={image['data_url']} alt="" width="100" />
+                           <img src={image['data_url']} alt="" width={120} height={120} />
                            <div className={styles.updateRemoveImageContainer}>
                               <button onClick={() => onImageUpdate(index)}>Atualizar</button>
                               <button onClick={() => onImageRemove(index)}>Remover</button>

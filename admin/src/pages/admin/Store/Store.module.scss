@@ -43,9 +43,9 @@
    justify-content: center;
    background-color: var(--cinza-escuro);
    border-radius: 8px;
-   height: 20vh;
-   width: 70%;
-   margin-top: 10%;
+   height: 23vh;
+   width: 50%;
+   margin-top: 20%;
 
    .inputContainer {
       display: flex;
@@ -55,7 +55,7 @@
    .addImageContainer {
 
       button {
-         height: 30px;
+         height: 25px;
          padding: 0 5px 0 5px;
          cursor: pointer;
       }
@@ -84,7 +84,7 @@
       img {
          margin-bottom: 5px;
          border-radius: 8px;
-         width: 100px;
+         width: 120px;
          height: 110px;
       }
    }

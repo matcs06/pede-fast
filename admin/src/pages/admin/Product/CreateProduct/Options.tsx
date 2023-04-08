@@ -125,12 +125,12 @@ export default function Options({ ...props }) {
 
                   </ul>
                </div>
-               {optionalOrRequired == "obrigatório" && (
-                  <div className={styles.maximumQuantity}>
-                     <p>Quant. Máxima</p>
-                     <Input type="number" name="quantidade" value={optionmaximumQuantity} setFieldValue={setOptionmaximumQuantity} />
-                  </div>
-               )}
+
+               <div className={styles.maximumQuantity}>
+                  <p>Quant. Máxima</p>
+                  <Input type="number" name="quantidade" value={optionmaximumQuantity} setFieldValue={setOptionmaximumQuantity} />
+               </div>
+
 
             </div>
 

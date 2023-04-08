@@ -19,10 +19,10 @@ export default function Delivery() {
    const [showCreateCondition, setShowCreateCondition] = useState(false)
 
    const discountConditions = [
-      "Valor do item",
-      "Quantidade",
-      "Valor do item",
-      "Quantidade"
+      { nome: "Valor do item", tipo: "maior ou igual" },
+      { nome: "Cupom", tipo: "Igual" },
+
+
    ]
 
 
@@ -66,14 +66,14 @@ export default function Delivery() {
 
                   {discountConditions.map((option, index) => (
 
-                     <li key={index} style={{ display: showDropDown ? "flex" : "none" }} onClick={() => { handleShowDropDown(option) }}>{option}</li>
+                     <li key={index} style={{ display: showDropDown ? "flex" : "none" }} onClick={() => { handleShowDropDown(option.nome) }}>{option.nome} - ({option.tipo})</li>
                   ))}
                </ul>
 
                <div className={styles.bottomContainer}>
 
                   <div className={styles.parameterContainer}>
-                     <p>Parametro: </p>
+                     <p>Valor: </p>
                      <Input setFieldValue={setParameter} name={"parameter"} />
                   </div>
 
