@@ -12,17 +12,19 @@ export default function Delivery() {
    const [deliveryTax, setDeliveryTax] = useState("")
    const [checkBox, setCheckBox] = useState(false)
    const [selectedCondition, setSelectedCondition] = useState("")
+   const [conditionType, setConditionType] = useState("")
+
    const [paramter, setParameter] = useState("")
+   const [percentage, setPercentage] = useState("")
 
    const [showDropDown, setShowDropDown] = useState(false)
 
    const [showCreateCondition, setShowCreateCondition] = useState(false)
 
    const discountConditions = [
-      { nome: "Valor do item", tipo: "maior ou igual" },
+      { nome: "Valor do pedido", tipo: "maior ou igual" },
+      { nome: "Quantidade de itens", tipo: "maior ou igual" },
       { nome: "Cupom", tipo: "Igual" },
-
-
    ]
 
 
@@ -30,11 +32,12 @@ export default function Delivery() {
       setCheckBox(!checkBox)
    }
 
-   function handleShowDropDown(option: string) {
+   function handleShowDropDown(option: string, type: string) {
 
       if (option !== "") {
 
          setSelectedCondition(option)
+         setConditionType(type)
       }
       setShowDropDown(!showDropDown)
    }
@@ -57,7 +60,7 @@ export default function Delivery() {
                <ul className={styles.dropDownContainer} >
                   <div className={styles.inputArrowContainer}>
                      <Input value={selectedCondition} name={"discount"} type={"text"} placeholder={"Condição"} readOnly={"readonly"} setFieldValue={setDeliveryTax} />
-                     <BsFillArrowDownCircleFill size={20} className={styles.arrow} onClick={() => { handleShowDropDown("") }} />
+                     <BsFillArrowDownCircleFill size={20} className={styles.arrow} onClick={() => { handleShowDropDown("", "") }} />
                      <AiFillPlusCircle size={20} className={styles.add} onClick={() => setShowCreateCondition(true)} />
 
                   </div>
@@ -66,7 +69,7 @@ export default function Delivery() {
 
                   {discountConditions.map((option, index) => (
 
-                     <li key={index} style={{ display: showDropDown ? "flex" : "none" }} onClick={() => { handleShowDropDown(option.nome) }}>{option.nome} - ({option.tipo})</li>
+                     <li key={index} style={{ display: showDropDown ? "flex" : "none" }} onClick={() => { handleShowDropDown(option.nome, option.tipo) }}>{option.nome} - ({option.tipo})</li>
                   ))}
                </ul>
 
@@ -79,12 +82,15 @@ export default function Delivery() {
 
                   <div className={styles.parameterContainer}>
                      <p>Porcentagem: </p>
-                     <Input setFieldValue={setParameter} name={"parameter"} type={"number"} />
+                     <Input setFieldValue={setPercentage} name={"parameter"} type={"number"} />
                   </div>
+                  <span>Se o {selectedCondition} for {conditionType} a {paramter} então descontará {percentage}% da taxa de entrega</span>
+
                </div>
 
 
             </div>
+
          )}
          <div className={styles.buttonContainer}>
             <Button>Salvar</Button>
