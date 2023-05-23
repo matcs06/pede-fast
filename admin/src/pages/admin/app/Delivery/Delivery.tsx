@@ -6,7 +6,6 @@ import { AiFillPlusCircle } from "react-icons/ai"
 import Input from "../../../../components/Input/Input"
 import Button from "../../../../components/Button/Button"
 import CheckBox from "../../../../components/CheckBox/CheckBox"
-import Condition from "./Condition"
 
 export default function Delivery() {
    const [deliveryTax, setDeliveryTax] = useState("")
@@ -61,11 +60,7 @@ export default function Delivery() {
                   <div className={styles.inputArrowContainer}>
                      <Input value={selectedCondition} name={"discount"} type={"text"} placeholder={"Condição"} readOnly={"readonly"} setFieldValue={setDeliveryTax} />
                      <BsFillArrowDownCircleFill size={20} className={styles.arrow} onClick={() => { handleShowDropDown("", "") }} />
-                     <AiFillPlusCircle size={20} className={styles.add} onClick={() => setShowCreateCondition(true)} />
-
                   </div>
-
-
 
                   {discountConditions.map((option, index) => (
 
@@ -95,12 +90,6 @@ export default function Delivery() {
          <div className={styles.buttonContainer}>
             <Button>Salvar</Button>
          </div>
-         {showCreateCondition && (
-            <div className={styles.conditionModal}>
-               <Condition showModal={setShowCreateCondition} />
-            </div>
-         )}
-
       </div>
    )
 }

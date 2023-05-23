@@ -172,7 +172,7 @@
 
    .arrow {
       position: absolute;
-      right: 15%;
+      right: 8%;
       color: var(--laranja-main);
       cursor: pointer;
       top: 25%;
@@ -183,19 +183,7 @@
       }
    }
 
-   .add {
-      position: absolute;
-      color: var(--laranja-main);
-      right: 2%;
-      top: 25%;
-      cursor: pointer;
-      transition: 0.2s;
 
-
-      &:hover {
-         color: rgb(195, 78, 6);
-      }
-   }
 }
 
 .buttonContainer {
