@@ -1,18 +1,7 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from 'next'
+import axios from "axios";
+//  baseURL: "http://localhost:3333/",
+let instace = axios.create({
+  baseURL: "http://localhost:3333/",
+});
 
-type Data = {
-  name: string
-}
-
-export default function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Data>
-) {
-
-  const obj = {
-    name: "something",
-    id: "1212312312"
-  }
-  res.json(obj)
-}
+export default instace

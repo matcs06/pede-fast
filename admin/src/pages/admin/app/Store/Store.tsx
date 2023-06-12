@@ -10,8 +10,10 @@ export default function Store() {
 
    const [storeName, setStoreName] = useState("")
    const [storeAddress, setSoreAddress] = useState("")
-   const [bannerCollor, setBannerCollor] = useState("#aabbcc")
-   const [showPicker, setShowPicker] = useState(false)
+   const [storePhoneNumber, setStorePhoneNumber] = useState("")
+
+   //const [bannerCollor, setBannerCollor] = useState("#aabbcc")
+   //const [showPicker, setShowPicker] = useState(false)
    const [images, setImages] = useState([])
    const [storeStatus, setStoreStatus] = useState("")
    const [displayStatus, setDisplayStatus] = useState(false)
@@ -38,23 +40,14 @@ export default function Store() {
          <div className={styles.inputContainer}>
             <Input setFieldValue={setStoreName} placeholder={"Nome da Loja"} name={"store name"} />
             <Input setFieldValue={setSoreAddress} placeholder={"Endereço"} name={"store address"} />
+            <Input setFieldValue={setStorePhoneNumber} placeholder={"Telefone"} name={"store phone"} />
+
             {/* <div className={styles.chooseColorContainer}>
                <p>Cor secundária:</p>
                <Input onClick={() => setShowPicker(true)} value={bannerCollor} setFieldValue={() => { }} placeholder={"Cor do banner"} name={"banner collor"} />
 
             </div> */}
-            <div className={styles.statusContainer}>
-               <p>Status: </p>
-               <ul >
-                  <p style={{ color: storeStatus === "aberto" ? "#0ed004" : "#F24E1E" }} onClick={() => setDisplayStatus(!displayStatus)}>{storeStatus == "" ? "Selecione" : storeStatus}</p>
 
-                  {displayStatus && status.map((sstatus) =>
-
-                     <li style={{ color: sstatus.status === "aberto" ? "#0ed004" : "#F24E1E" }} key={sstatus.key} onClick={() => onClickStatus(sstatus.status)}>{sstatus.status}</li>
-                  )}
-
-               </ul>
-            </div>
             {/*      {showPicker && (
                <div className={styles.colorPicker}>
 

@@ -40,3 +40,16 @@
       cursor: pointer;
    }
 }
+
+.usernameContainer {
+   display: flex;
+   padding: 0;
+   width: 100%;
+
+   .existsIcon {
+      position: absolute;
+      right: 17%;
+   }
+
+
+}

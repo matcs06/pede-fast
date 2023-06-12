@@ -6,6 +6,7 @@ import Options from "./Options"
 import { MdCancel } from "react-icons/md"
 
 import ImageUploading from 'react-images-uploading';
+import instace from "../../../../../api/hello"
 
 
 interface OptionsItems {
@@ -33,6 +34,11 @@ interface ProductType {
 
 }
 
+interface Images {
+   data_url: string,
+   file: any,
+}
+
 type openedFromType = "new" | "existent"
 
 export default function CreateProduct({ ...props }: ProductType) {
@@ -58,20 +64,55 @@ export default function CreateProduct({ ...props }: ProductType) {
    const [productDescription, setProductDescription] = useState(productDescriptionDefaultValue)
    const [productPrice, setProductPrice] = useState(productPriceDefaultValue)
    const [productStock, setProductStock] = useState(productQuantityDefaultValue)
-   const [images, setImages] = useState([])
+   const [images, setImages] = useState<Images[]>([])
 
    const [showModal, setShowModal] = useState(false)
    const [openedFrom, setOpenedFrom] = useState<openedFromType>("new")
 
    const [options, setOptions] = useState<CreatedOptionType[]>(productOptionsDefaultValue) /* all created options */
 
+
+   const username = String(localStorage.getItem("username"))
+   const token = String(localStorage.getItem("token"))
+   const user_id = String(localStorage.getItem("user_id"))
+
    /* variables to store addtional values */
    const [chosedOption, setChoosedOption] = useState<CreatedOptionType>();
 
 
-   function handleCreateUpdateProduct() {
+   async function handleCreateUpdateProduct() {
       console.log("clicado no botao")
+
+      const formData = new FormData()
+
+
+      try {
+
+         formData.append("name", productName)
+         formData.append("description", productDescription)
+         formData.append("price", productPrice)
+         formData.append("user_id", user_id)
+         formData.append("options", JSON.stringify(options))
+         formData.append("quantity", productStock)
+         formData.append("filename", images[0].file)
+
+         await instace.post("/products", formData, {
+            headers: {
+               "Content-Type": "multipart/form-data",
+               Authorization: "Bearer " + token,
+            },
+         });
+         window.alert(`Produto ${productName} criado com sucesso`);
+      } catch (error) {
+         window.alert(
+            "erro ao criar novo produto: Verifique se está logado ou produtos com o mesmo nome e tente novamente"
+         );
+
+      }
+
    }
+
+   console.log(images[0])
 
    //FUNCAO QUE MOSTRA NOVA OPTION NA TELA DE CRIACAO (CHAMADA COMO PROPS NO COMPONENTE Options)
    function handleNewOption(newOption: CreatedOptionType) {
