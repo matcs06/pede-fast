@@ -6,6 +6,7 @@ import CreateProduct from "../CreateProduct/CreateProduct";
 import { MdCancel } from "react-icons/md"
 import instace from "../../../../../api/hello";
 import { BRLReais } from "../../../../../utils/CurrencyFormat"
+import { useUserLogin } from "../../../../../context/Context";
 
 
 interface OptionsItems {
@@ -34,6 +35,9 @@ interface ProductType {
 }
 
 export default function ProductList() {
+
+   const [userInfo, setUserInfo] = useUserLogin()
+
    const [inputedValue, setImputedValue] = useState("")
 
    const [producListApi, setProductListApi] = useState<ProductType[]>([])
@@ -43,8 +47,6 @@ export default function ProductList() {
 
    let user_id: string;
    let username: string;
-   user_id = String(localStorage.getItem("user_id"))
-   username = String(localStorage.getItem("username"))
 
    const imagePrefixLink = "http://localhost:3333/files/"
    const [productSelected, setProductSelected] = useState<ProductType>({ description: "", id: "", image_url: "", name: "", options: [], price: "", quantity: "", createOrUpdate: "update" })
@@ -71,6 +73,14 @@ export default function ProductList() {
 
    useEffect(() => {
 
+      user_id = String(localStorage.getItem("user_id"))
+      username = String(localStorage.getItem("username"))
+      const token = String(localStorage.getItem("token"))
+
+      if (userInfo == null) {
+         setUserInfo({ user_id, username, token })
+      }
+
       async function loadProducts() {
          try {
             const response = await instace.get(`products/?user_id=${user_id}`)
@@ -86,7 +96,7 @@ export default function ProductList() {
       return () => {
          setProductListApi([])
       }
-   }, [])
+   }, [userInfo])
 
    function handleSerach(event: any) {
       event?.preventDefault()
@@ -115,7 +125,7 @@ export default function ProductList() {
                return (
                   <div key={index} className={styles.productCard} onClick={() => handleClickProdutc(product.id)}>
                      <div className={styles.imageContainer}>
-                        <Image className={styles.productImage} width={270} height={200} src={imagePrefixLink + username + "/" + product.image_url} alt="imagem" />
+                        <Image className={styles.productImage} width={270} height={200} src={imagePrefixLink + userInfo.username + "/" + product.image_url} alt="imagem" />
                      </div>
                      <p className={styles.productTile}>{product.name}</p>
                      <div style={{ display: "flex", justifyContent: "flex-start" }}>
@@ -137,6 +147,7 @@ export default function ProductList() {
                   options={productSelected.options}
                   price={productSelected.price}
                   quantity={productSelected.quantity}
+                  id={productSelected.id}
                   key={productSelected.name} />
             </div>
          }

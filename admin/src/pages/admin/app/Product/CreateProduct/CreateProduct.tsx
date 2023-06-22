@@ -31,6 +31,7 @@ interface ProductType {
    image_url: string,
    options: CreatedOptionType[]
    createOrUpdate: "create" | "update"
+   id: string;
 
 }
 
@@ -48,6 +49,7 @@ export default function CreateProduct({ ...props }: ProductType) {
    let productPriceDefaultValue = ""
    let productQuantityDefaultValue = ""
    let productImageDefaultValue = ""
+   let productDefaultId = ""
    let productOptionsDefaultValue: CreatedOptionType[] = [];
 
    if (props.createOrUpdate === "update") {
@@ -57,6 +59,7 @@ export default function CreateProduct({ ...props }: ProductType) {
       productQuantityDefaultValue = props.quantity
       productImageDefaultValue = props.image_url
       productOptionsDefaultValue = props.options
+      productDefaultId = props.id
 
    }
 
@@ -76,43 +79,116 @@ export default function CreateProduct({ ...props }: ProductType) {
    const token = String(localStorage.getItem("token"))
    const user_id = String(localStorage.getItem("user_id"))
 
+   const imagePrefixLink = "http://localhost:3333/files/"
+
+   const productImageUrl = imagePrefixLink + username + "/" + productImageDefaultValue
+
    /* variables to store addtional values */
    const [chosedOption, setChoosedOption] = useState<CreatedOptionType>();
 
+   async function handleDeleteProduct() {
+
+      try {
+         await instace.delete("products", {
+            params: { user_name: username, image_from: "product", id: productDefaultId }, headers: {
+               Authorization: "Bearer " + token,
+            },
+         })
+         window.alert(`Produto removido com sucesso`);
+      } catch (error) {
+         console.log(error)
+         window.alert(`erro ao remover produto`);
+      }
+
+
+
+   }
 
    async function handleCreateUpdateProduct() {
       console.log("clicado no botao")
 
       const formData = new FormData()
 
+      const update_image = images[0] == null ? "no" : "yes"
+      console.log(update_image)
+      if (images[0] == null) {
+         const imagesdata = {
+            file: "fake",
+            data_url: "fake",
+         }
+         images[0] = imagesdata
+      }
 
-      try {
+      if (props.createOrUpdate !== "update") {
+         //Caso seja criacao de um produto
+         try {
 
-         formData.append("name", productName)
-         formData.append("description", productDescription)
-         formData.append("price", productPrice)
-         formData.append("user_id", user_id)
-         formData.append("options", JSON.stringify(options))
-         formData.append("quantity", productStock)
-         formData.append("filename", images[0].file)
+            formData.append("name", productName)
+            formData.append("description", productDescription)
+            formData.append("price", productPrice)
+            formData.append("user_id", user_id)
+            formData.append("options", JSON.stringify(options))
+            formData.append("quantity", productStock)
+            formData.append("update_image", update_image)
+            formData.append("filename", images[0].file)
 
-         await instace.post("/products", formData, {
-            headers: {
-               "Content-Type": "multipart/form-data",
-               Authorization: "Bearer " + token,
-            },
-         });
-         window.alert(`Produto ${productName} criado com sucesso`);
-      } catch (error) {
-         window.alert(
-            "erro ao criar novo produto: Verifique se está logado ou produtos com o mesmo nome e tente novamente"
-         );
+            await instace.post("/products", formData, {
+               headers: {
+                  "Content-Type": "multipart/form-data",
+                  Authorization: "Bearer " + token,
+               },
+            });
+            window.alert(`Produto ${productName} criado com sucesso`);
+         } catch (error) {
+            window.alert(
+               "erro ao criar novo produto: Verifique se está logado ou produtos com o mesmo nome e tente novamente"
+            );
+
+         }
+      } else {
+         // Caso seja atualizacao de um produto
+         try {
+
+            formData.append("name", productName)
+            formData.append("description", productDescription)
+            formData.append("price", productPrice)
+            formData.append("quantity", productStock)
+            formData.append("enabled", "true")
+            formData.append("image_from", "product")
+            formData.append("product_id", productDefaultId)
+            formData.append("username", username)
+            formData.append("user_id", user_id)
+            formData.append("options", JSON.stringify(options))
+            formData.append("update_image", update_image)
+            formData.append("filename", images[0].file)
+
+            await instace.patch("/products/update", formData, {
+               headers: {
+                  "Content-Type": "multipart/form-data",
+                  Authorization: "Bearer " + token,
+               },
+            });
+            window.alert(`Produto ${productName} atualizado com sucesso`);
+         } catch (error) {
+            console.log(error)
+            window.alert(
+
+               "erro ao criar novo produto: Verifique se está logado ou produtos com o mesmo nome e tente novamente"
+            );
+
+         }
 
       }
+      //Reseting null in case it was previosly nulled but filled to go into the api
+      if (images[0] !== null) {
+         if (images[0].file == "fake") {
+            images[0] == null
+         }
+      }
+
 
    }
 
-   console.log(images[0])
 
    //FUNCAO QUE MOSTRA NOVA OPTION NA TELA DE CRIACAO (CHAMADA COMO PROPS NO COMPONENTE Options)
    function handleNewOption(newOption: CreatedOptionType) {
@@ -204,11 +280,22 @@ export default function CreateProduct({ ...props }: ProductType) {
                               onClick={onImageUpload}
                               {...dragProps}
                            >
-                              Adicione uma imagem
+                              {productImageDefaultValue ? "Atualizar imagem" : "Adicionar uma images"}
                            </button>
                         )}
 
                         &nbsp;
+
+                        {images[0] == null &&
+                           <div className={styles.imageItemContainer}>
+                              {props.createOrUpdate == "update" && (
+                                 <img src={productImageUrl} alt="" width={120} height={120} />
+
+                              )}
+
+                           </div>
+                        }
+
                         {imageList.map((image, index) => (
                            <div key={index} className={styles.imageItemContainer}>
                               <img src={image['data_url']} alt="" width="100" />
@@ -238,7 +325,13 @@ export default function CreateProduct({ ...props }: ProductType) {
 
             <div className={styles.buttonContainerparent}>
                <Button handleClick={handleCreateUpdateProduct}>{props.createOrUpdate === "update" ? "Atualizar produto" : "Criar Produto"}</Button>
+               {props.createOrUpdate === "update" && (
+                  <Button handleClick={handleDeleteProduct}>Remover</Button>
+
+               )}
+
             </div>
+
 
          </div>
          {showModal && (

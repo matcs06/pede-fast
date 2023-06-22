@@ -5,6 +5,7 @@ import { useState } from "react"
 import Input from "../../../components/Input/Input"
 import Button from "../../../components/Button/Button"
 import instace from "../../../api/hello"
+import { useUserLogin } from "../../../context/Context"
 
 interface SessionData {
    token: string,
@@ -17,6 +18,7 @@ export default function Login() {
 
    const [userName, setUserName] = useState()
    const [password, setPassword] = useState()
+   const [_, setUserInfo] = useUserLogin()
 
    async function onLoginClick() {
 
@@ -29,6 +31,17 @@ export default function Login() {
          localStorage.setItem("username", response.data.user.username)
          localStorage.setItem("user_id", response.data.user.user_id)
          localStorage.setItem("token", response.data.token)
+
+         const userInfoObject = {
+            username: response.data.user.username,
+            user_id: response.data.user.user_id,
+            token: response.data.token
+
+         }
+
+         setUserInfo(userInfoObject)
+
+
 
          window.location.pathname = ("/admin/app/")
 
