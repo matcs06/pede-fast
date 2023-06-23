@@ -47,11 +47,12 @@
    flex-direction: row;
    align-items: center;
    justify-content: center;
-   padding-left: 5%;
+   width: 100%;
 
    p {
       color: rgb(99, 99, 99);
       margin-bottom: 10px;
+      margin-left: 0px;
    }
 
    span {
@@ -62,18 +63,33 @@
 
    div {
 
+      display: flex;
+      width: 45%;
 
-      input[name="price"] {
-         max-width: 100px;
-         justify-content: center;
+      justify-content: center;
 
+      div {
+         margin: 0;
+         padding: 0;
+
+
+
+         input[name="price"] {
+            max-width: 80px;
+            justify-content: center;
+
+         }
+
+
+
+         input[name="stock"] {
+            max-width: 80px;
+            justify-content: center;
+
+         }
       }
 
-      input[name="stock"] {
-         max-width: 100px;
-         justify-content: center;
 
-      }
    }
 
 }

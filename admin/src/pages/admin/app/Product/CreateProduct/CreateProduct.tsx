@@ -250,10 +250,16 @@ export default function CreateProduct({ ...props }: ProductType) {
                <Input type="text" value={productDescription} setFieldValue={setProductDescription} name={"Description"} placeholder="Descrição" />
 
                <div className={styles.priceAndStockContainer}>
-                  <p>Preço:</p>
-                  <Input type="number" value={productPrice} setFieldValue={setProductPrice} name={"price"} />
-                  <p>Estoque: </p>
-                  <Input type="number" value={productStock} setFieldValue={setProductStock} name={"stock"} />
+                  <div>
+                     <p>Preço:</p>
+                     <Input type="number" value={productPrice} setFieldValue={setProductPrice} name={"price"} />
+                  </div>
+
+                  <div>
+                     <p>Estoque: </p>
+                     <Input type="number" value={productStock} setFieldValue={setProductStock} name={"stock"} />
+                  </div>
+
                </div>
             </form>
 

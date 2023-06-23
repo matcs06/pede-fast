@@ -31,9 +31,6 @@ export default function Store() {
    //const [showPicker, setShowPicker] = useState(false)
    const [images, setImages] = useState<Images[]>([])
    const [storeStatus, setStoreStatus] = useState("")
-   const [displayStatus, setDisplayStatus] = useState(false)
-
-   const [storeInfo, setStoreInfo] = useState<IStoreInfo>()
 
 
    const token = String(localStorage.getItem("token"))
@@ -51,10 +48,31 @@ export default function Store() {
       setImages(imageList);
    };
 
-   const onClickStatus = (storeStatus: string) => {
-      setStoreStatus(storeStatus)
-      setDisplayStatus(false)
+   const onClickStatus = async () => {
+
+      try {
+         await instace.patch("/users/updateStoreStatus", {
+            store_status: storeStatus == "opened" ? "closed" : "opened"
+         }, {
+            headers: {
+               Authorization: "Bearer " + token,
+            },
+         })
+
+         const displayStatus = storeStatus == "opened" ? "Fechada" : "Aberta"
+         setStoreStatus(storeStatus == "opened" ? "closed" : "opened")
+         window.alert(`Loja ${displayStatus} com sucesso!`)
+      } catch (error) {
+         window.alert(`Erro ao atualizar!`)
+      }
+
+
+
    }
+
+   useEffect(() => {
+
+   }, [storeStatus])
 
    useEffect(() => {
       usernameload = String(localStorage.getItem("username"))
@@ -138,19 +156,19 @@ export default function Store() {
             <Input setFieldValue={setSoreAddress} placeholder={"Endereço"} name={"store address"} value={storeAddress} />
             <Input setFieldValue={setStorePhoneNumber} placeholder={"Telefone"} name={"store phone"} value={storePhoneNumber} />
 
-            {/* <div className={styles.chooseColorContainer}>
-               <p>Cor secundária:</p>
-               <Input onClick={() => setShowPicker(true)} value={bannerCollor} setFieldValue={() => { }} placeholder={"Cor do banner"} name={"banner collor"} />
-
-            </div> */}
-
-            {/*      {showPicker && (
-               <div className={styles.colorPicker}>
-
-                  <HexColorPicker onMouseLeave={() => setShowPicker(false)} hidden={showPicker} color={bannerCollor} onChange={setBannerCollor} />
+            {storeStatus == "opened" ? (
+               <div onClick={onClickStatus} style={{ background: "#43c14b" }} className={styles.storeStatusStyle}>
+                  Loja aberta - Fechar Loja
                </div>
+            ) :
+               (
+                  <div onClick={onClickStatus} style={{ background: "#cf3b1d", }} className={styles.storeStatusStyle}>
+                     Loja Fechada - Abrir Loja
+                  </div>
+               )
+            }
 
-            )} */}
+
          </div>
          <div className={styles.imageUploadContainer}>
             <ImageUploading

@@ -43,9 +43,9 @@
    justify-content: center;
    background-color: var(--cinza-escuro);
    border-radius: 8px;
-   height: 23vh;
+   height: 25vh;
    width: 50%;
-   margin-top: 20%;
+   margin-top: 5%;
 
    .inputContainer {
       display: flex;
@@ -157,8 +157,26 @@
    padding-right: 12%;
    top: 24%;
 
+
 }
 
+
+.storeStatusStyle {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   cursor: pointer;
+   transition: 0.2s;
+   color: #616161;
+   height: 30px;
+   color: #fff;
+   transition: 0.2s;
+
+
+   &:hover {
+      opacity: 80%;
+   }
+}
 
 @media (max-width: 500px) {
    .statusContainer {
