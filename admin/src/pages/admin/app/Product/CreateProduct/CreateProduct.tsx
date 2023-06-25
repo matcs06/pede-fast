@@ -29,9 +29,11 @@ interface ProductType {
    price: string,
    quantity: string,
    image_url: string,
+   enabled: boolean,
    options: CreatedOptionType[]
    createOrUpdate: "create" | "update"
    id: string;
+
 
 }
 
@@ -50,6 +52,7 @@ export default function CreateProduct({ ...props }: ProductType) {
    let productQuantityDefaultValue = ""
    let productImageDefaultValue = ""
    let productDefaultId = ""
+   let producEnabledCurrent = true
    let productOptionsDefaultValue: CreatedOptionType[] = [];
 
    if (props.createOrUpdate === "update") {
@@ -60,6 +63,7 @@ export default function CreateProduct({ ...props }: ProductType) {
       productImageDefaultValue = props.image_url
       productOptionsDefaultValue = props.options
       productDefaultId = props.id
+      producEnabledCurrent = props.enabled
 
    }
 
@@ -68,6 +72,8 @@ export default function CreateProduct({ ...props }: ProductType) {
    const [productPrice, setProductPrice] = useState(productPriceDefaultValue)
    const [productStock, setProductStock] = useState(productQuantityDefaultValue)
    const [images, setImages] = useState<Images[]>([])
+   const [productStatus, setProductStatus] = useState(producEnabledCurrent)
+
 
    const [showModal, setShowModal] = useState(false)
    const [openedFrom, setOpenedFrom] = useState<openedFromType>("new")
@@ -84,7 +90,7 @@ export default function CreateProduct({ ...props }: ProductType) {
    const productImageUrl = imagePrefixLink + username + "/" + productImageDefaultValue
 
    /* variables to store addtional values */
-   const [chosedOption, setChoosedOption] = useState<CreatedOptionType>();
+   //const [chosedOption, setChoosedOption] = useState<CreatedOptionType>();
 
    async function handleDeleteProduct() {
 
@@ -168,7 +174,9 @@ export default function CreateProduct({ ...props }: ProductType) {
                   Authorization: "Bearer " + token,
                },
             });
+
             window.alert(`Produto ${productName} atualizado com sucesso`);
+
          } catch (error) {
             console.log(error)
             window.alert(
@@ -189,14 +197,41 @@ export default function CreateProduct({ ...props }: ProductType) {
 
    }
 
+   const onImageChange = (imageList: any, addUpdateIndex: any) => {
+      // data for submit
+      setImages(imageList);
+   };
 
-   //FUNCAO QUE MOSTRA NOVA OPTION NA TELA DE CRIACAO (CHAMADA COMO PROPS NO COMPONENTE Options)
-   function handleNewOption(newOption: CreatedOptionType) {
-      setOptions([...options, newOption]) /* adding a new option from additional panel */
+   const onClickStatus = async () => {
+
+      try {
+         await instace.patch("/products/stockupdate", {
+            id: productDefaultId, quantity: productQuantityDefaultValue, enabled: !producEnabledCurrent
+         }, {
+            headers: {
+               Authorization: "Bearer " + token,
+            },
+         })
+
+         const productStatus = producEnabledCurrent == true ? "Desabilitado" : "Habilitado"
+         setProductStatus(!producEnabledCurrent)
+         window.alert(`Produto ${productStatus} com sucesso!`)
+      } catch (error) {
+         window.alert(`Erro ao atualizar!`)
+      }
+
+
+
    }
 
+   //FUNCAO QUE MOSTRA NOVA OPTION NA TELA DE CRIACAO (CHAMADA COMO PROPS NO COMPONENTE Options)
+   //function handleNewOption(newOption: CreatedOptionType) {
+   // setOptions([...options, newOption]) /* adding a new option from additional panel */
+   //} 
+
+
    //FUNCAO QUE ATUALIZA UMA OPCAO EXISTENTE NA TELA DE CRIACAO (CHAMADA COMO PROPS NO COMPONENTE Options)
-   function handleUpdateOption(updatedOption: CreatedOptionType) {
+   /* function handleUpdateOption(updatedOption: CreatedOptionType) {
       const updatedOptions = options.map((option) => {
          if (option.id === updatedOption.id) {
             return updatedOption
@@ -207,36 +242,33 @@ export default function CreateProduct({ ...props }: ProductType) {
       })
 
       setOptions(updatedOptions)
-   }
+   } */
 
    //FUNCAO PARA ABRIR PARA CRIAR UMA NOVA OPTION
-   function addOption() {
-      setOpenedFrom("new")
-      setShowModal(!showModal)
-   }
-
+   /*  function addOption() {
+       setOpenedFrom("new")
+       setShowModal(!showModal)
+    }
+  */
    //FUNCAO QUE ABRE UMA OPTION EXISTENTE, PERMITINDO ATUALIZAR A OPTION
-   function onClickAdditionals(id: string) {
-      //passando a opcao escolhida para o modal
-      const optionsChosed = options.filter((option) => option.id === id)
-
-      setChoosedOption(optionsChosed[0])
-      setOpenedFrom("existent")
-      setShowModal(true)
-
-   }
+   /*  function onClickAdditionals(id: string) {
+       //passando a opcao escolhida para o modal
+       const optionsChosed = options.filter((option) => option.id === id)
+ 
+       setChoosedOption(optionsChosed[0])
+       setOpenedFrom("existent")
+       setShowModal(true)
+ 
+    } */
 
    //FUNCAO QUE DELETA UMA OPTION DA TELA DE PRODUTOS
-   function handleDeleteOption(id: string) {
+   /* function handleDeleteOption(id: string) {
       const optionsAfterDeleted = options.filter((option) => option.id != id)
 
       setOptions(optionsAfterDeleted)
    }
+ */
 
-   const onImageChange = (imageList: any, addUpdateIndex: any) => {
-      // data for submit
-      setImages(imageList);
-   };
 
    return (
       <>
@@ -261,6 +293,24 @@ export default function CreateProduct({ ...props }: ProductType) {
                   </div>
 
                </div>
+               {props.createOrUpdate == "update" && (
+                  <div>
+                     {productStatus ? (
+                        <div onClick={onClickStatus} style={{ background: "#43c14b" }} className={styles.productStatusStyle}>
+                           Produto Habilitado - clique para mudar
+                        </div>
+                     ) :
+                        (
+                           <div onClick={onClickStatus} style={{ background: "#cf3b1d", }} className={styles.productStatusStyle}>
+                              Produto Desabilitado - Clique para mudar
+                           </div>
+                        )
+                     }
+                  </div>
+               )}
+
+
+
             </form>
 
             <div className={styles.imageUploadContainer}>
@@ -286,7 +336,7 @@ export default function CreateProduct({ ...props }: ProductType) {
                               onClick={onImageUpload}
                               {...dragProps}
                            >
-                              {productImageDefaultValue ? "Atualizar imagem" : "Adicionar uma images"}
+                              {productImageDefaultValue ? "Atualizar imagem" : "Adicionar uma imagem"}
                            </button>
                         )}
 
@@ -316,7 +366,7 @@ export default function CreateProduct({ ...props }: ProductType) {
                </ImageUploading>
             </div>
 
-            <div className={styles.options}>
+            {/* <div className={styles.options}>
                <h4 onClick={addOption}>Opçoes e Adicionais</h4>
                <ul>
                   {options?.map((option) =>
@@ -327,7 +377,7 @@ export default function CreateProduct({ ...props }: ProductType) {
 
                   )}
                </ul>
-            </div>
+            </div> */}
 
             <div className={styles.buttonContainerparent}>
                <Button handleClick={handleCreateUpdateProduct}>{props.createOrUpdate === "update" ? "Atualizar produto" : "Criar Produto"}</Button>
@@ -340,7 +390,7 @@ export default function CreateProduct({ ...props }: ProductType) {
 
 
          </div>
-         {showModal && (
+         {/* { showModal && (
             < Options createAdditional={handleNewOption}
                updateOption={handleUpdateOption}
                setShowModal={setShowModal}
@@ -348,7 +398,7 @@ export default function CreateProduct({ ...props }: ProductType) {
                chosedOption={chosedOption}
                openedFrom={openedFrom}
             />
-         )}
+         )}  */}
       </>
 
    )

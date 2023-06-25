@@ -30,6 +30,7 @@ interface ProductType {
    price: string,
    quantity: string,
    image_url: string,
+   enabled: boolean,
    options: CreatedOptionType[]
    createOrUpdate?: "create" | "update"
 }
@@ -42,6 +43,8 @@ export default function ProductList() {
 
    const [producListApi, setProductListApi] = useState<ProductType[]>([])
 
+   const [updateList, setUpdateList] = useState(false)
+
    const fielteredProducts = producListApi.filter((item: ProductType) => item.name.toLocaleLowerCase().includes(inputedValue.toLocaleLowerCase()))
    const [showEditProductModal, setShowEditProductModal] = useState(false)
 
@@ -49,7 +52,7 @@ export default function ProductList() {
    let username: string;
 
    const imagePrefixLink = "http://localhost:3333/files/"
-   const [productSelected, setProductSelected] = useState<ProductType>({ description: "", id: "", image_url: "", name: "", options: [], price: "", quantity: "", createOrUpdate: "update" })
+   const [productSelected, setProductSelected] = useState<ProductType>({ description: "", id: "", image_url: "", name: "", options: [], price: "", quantity: "", createOrUpdate: "update", enabled: true })
 
    const productTest = {
       name: "Petit gateau",
@@ -96,7 +99,7 @@ export default function ProductList() {
       return () => {
          setProductListApi([])
       }
-   }, [userInfo])
+   }, [userInfo, showEditProductModal])
 
    function handleSerach(event: any) {
       event?.preventDefault()
@@ -123,7 +126,7 @@ export default function ProductList() {
 
             {fielteredProducts.map((product: ProductType, index) => {
                return (
-                  <div key={index} className={styles.productCard} onClick={() => handleClickProdutc(product.id)}>
+                  <div style={{ background: product.enabled ? "#e4dcdc" : "#434343" }} key={index} className={styles.productCard} onClick={() => handleClickProdutc(product.id)}>
                      <div className={styles.imageContainer}>
                         <Image className={styles.productImage} width={270} height={200} src={imagePrefixLink + userInfo.username + "/" + product.image_url} alt="imagem" />
                      </div>
@@ -147,8 +150,11 @@ export default function ProductList() {
                   options={productSelected.options}
                   price={productSelected.price}
                   quantity={productSelected.quantity}
+                  enabled={productSelected.enabled}
                   id={productSelected.id}
-                  key={productSelected.name} />
+                  key={productSelected.name}
+               />
+
             </div>
          }
 
