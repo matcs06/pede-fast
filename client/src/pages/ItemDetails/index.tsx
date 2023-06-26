@@ -19,6 +19,7 @@ export default function ItemDetail(productModel: IProductType) {
    const [_, setCartContext] = useCartContext()
    const [productQuantiy, setProductQuantity] = useState(1)
    const [productOptions, setProductOptions] = useState<ProductOrderOptions[]>([])
+   let productOriginalPrice = Number(productModel.price)
    let productPrice = Number(productModel.price)
    const userName = localStorage.getItem("user_name");
 
@@ -39,10 +40,11 @@ export default function ItemDetail(productModel: IProductType) {
          productName: productModel.name,
          productQuantity: productQuantiy,
          productOrderPrice: productPrice,
-         productOriginalPrice: productPrice,
+         productOriginalPrice: productOriginalPrice,
          product_image_url: productModel.image_url,
          options: productOptions
       }
+
       if (productQuantiy > 0) {
          setCartContext(newProduct, "add")
       }
