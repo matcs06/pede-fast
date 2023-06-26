@@ -159,7 +159,7 @@ export default function CreateProduct({ ...props }: ProductType) {
             formData.append("description", productDescription)
             formData.append("price", productPrice)
             formData.append("quantity", productStock)
-            formData.append("enabled", "true")
+            formData.append("enabled", producEnabledCurrent ? "enabled" : "disabled")
             formData.append("image_from", "product")
             formData.append("product_id", productDefaultId)
             formData.append("username", username)
