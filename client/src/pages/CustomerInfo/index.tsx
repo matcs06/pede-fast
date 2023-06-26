@@ -77,7 +77,7 @@ export default function CustomerInfo() {
 
          const customerInfoMessage = `Nome: ${customerName}\nContato: ${customerPhone}\n\n`
          const cartMessage: IOrderProducts[] = cartContent
-         const deliveryTax = Number(deliveryInfo?.tax) > 0 ? "\n*Taxa de Entrega: " + BRLReais.format((Number(deliveryInfo?.tax) - discount)) + "*" : ""
+         const deliveryTax = Number(deliveryInfo?.tax) - Number(discount) > 0 ? "\n*Taxa de Entrega: " + BRLReais.format((Number(deliveryInfo?.tax) - discount)) + "*" : ""
          const totalOrderPrice = "\n*Total: " + BRLReais.format(cartTotalValue + (Number(deliveryInfo?.tax) - discount)) + "*\n"
          const deliveryInformation = "\nEndereço de Entrega: \n" + customerAddress + "\nComplemento: " + addressExtraInfo
 
@@ -140,13 +140,15 @@ export default function CustomerInfo() {
 
             }
 
-            <div className="w-full flex flex-col justify-end items-end mr-24 mt-6">
-               <p className="text-secondary-orange text-sm">Taxa de entrega: {BRLReais.format(Number(deliveryInfo?.tax))}</p>
+            <div className="w-4/5 flex flex-col justify-end items-end mt-6">
+               <p className="text-secondary-orange text-sm">Subtotal: {BRLReais.format(cartTotalValue)}</p>
+
+               <p className="text-secondary-orange text-sm">Taxa de entrega: + {BRLReais.format(Number(deliveryInfo?.tax))}</p>
                {discount > 0 && (
                   <p className="text-light-gree text-sm">Desconto: - {BRLReais.format(discount)}</p>
 
                )}
-               <></>
+
                <p className="text-light-gree text-sm">Total: {BRLReais.format(cartTotalValue + (Number(deliveryInfo?.tax) - discount))}</p>
             </div>
 
