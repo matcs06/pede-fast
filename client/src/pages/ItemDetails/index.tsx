@@ -20,6 +20,11 @@ export default function ItemDetail(productModel: IProductType) {
    const [productQuantiy, setProductQuantity] = useState(1)
    const [productOptions, setProductOptions] = useState<ProductOrderOptions[]>([])
    let productPrice = Number(productModel.price)
+   const userName = localStorage.getItem("user_name");
+
+
+   const imagePrefixLink = "http://localhost:3333/files/"
+
 
    let optionsTotalPrice = productOptions.reduce((total, option) => total + option.optionPrice, 0)
    productPrice = (productQuantiy * productPrice) + optionsTotalPrice
@@ -131,7 +136,7 @@ export default function ItemDetail(productModel: IProductType) {
          <div className="flex h-1/5 flex-col my-3 w-4/5 -mb-0">
             <div className="w-full flex items-center justify-center rounded-md">
 
-               <Image className="object-fill w-full h-52 max-w-xs" src={productModel.image_url || "nothing.png"} alt="Image-Produto" height={350} width={350} />
+               <Image className="object-fill w-full h-52 max-w-xs rounded-md" src={imagePrefixLink + userName + "/" + productModel.image_url || "nothing.png"} alt="Image-Produto" height={350} width={350} />
             </div>
             <div className="justify-between mt-3 items-stretch ml-2 px-1">
                <p className="text-secondary-orange font-bold mb-1 select-none ">{productModel.name}</p>

@@ -4,16 +4,27 @@ import PhoneInput from "@/components/PhoneInput";
 import { useCartContext } from "@/context/Context";
 import { BRLReais } from "@/utils/currencyFormat";
 import IsNumber from "@/utils/isNumber";
+import { TIMEOUT } from "dns";
 import { useRouter } from "next/router";
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { GrLocation } from "react-icons/gr"
 import { FormatMessage } from "./formatWppMesssage";
 import { IOrderProducts } from "./types";
+import instace from "@/api/appAPI";
+import { ApplyDiscount } from "./deliveryDiscount";
 
+interface IDelivery {
+   tax: string;
+   has_discount: boolean;
+   condition: string;
+   parameter: string;
+   discount_percentage: string
+}
 
 export default function CustomerInfo() {
 
-   const { push } = useRouter();
+   const { back } = useRouter();
+
    const [cartContent, setCartContent] = useCartContext()
 
    const [customerName, setCustomerName] = useState("")
@@ -24,14 +35,18 @@ export default function CustomerInfo() {
 
    const [getLocation, setGetLocation] = useState(false)
 
-   const cartTotalValue = cartContent.reduce((acc: number, cart: IOrderProducts) => acc + cart.productOrderPrice, 0)
+   const [showBackButton, setShowBackButton] = useState(false)
+   const [deliveryInfo, setDeliveryInfo] = useState<IDelivery>()
 
+   const cartTotalValue = cartContent.reduce((acc: number, cart: IOrderProducts) => acc + cart.productOrderPrice, 0)
+   const totalItems = cartContent.reduce((acc: number, cart: IOrderProducts) => acc + cart.productQuantity, 0)
+   const [discount, setDiscount] = useState(0)
 
    async function getCurrentLocation() {
       setGetLocation(true)
-      await navigator.geolocation.getCurrentPosition(location => {
+      navigator.geolocation.getCurrentPosition(location => {
          setLocation(location)
-      })
+      }, error => window.alert(error.message))
 
 
    }
@@ -62,21 +77,41 @@ export default function CustomerInfo() {
 
          const customerInfoMessage = `Nome: ${customerName}\nContato: ${customerPhone}\n\n`
          const cartMessage: IOrderProducts[] = cartContent
-         const totalOrderPrice = "\n*Total: " + BRLReais.format(cartTotalValue) + "*\n"
+         const deliveryTax = Number(deliveryInfo?.tax) > 0 ? "\n*Taxa de Entrega: " + BRLReais.format((Number(deliveryInfo?.tax) - discount)) + "*" : ""
+         const totalOrderPrice = "\n*Total: " + BRLReais.format(cartTotalValue + (Number(deliveryInfo?.tax) - discount)) + "*\n"
          const deliveryInformation = "\nEndereço de Entrega: \n" + customerAddress + "\nComplemento: " + addressExtraInfo
 
 
-         let formatedOrder = customerInfoMessage + FormatMessage(cartMessage) + totalOrderPrice + deliveryInformation + "\n" + locationLink
+         let formatedOrder = customerInfoMessage + FormatMessage(cartMessage) + deliveryTax + totalOrderPrice + deliveryInformation + "\n" + locationLink
 
          formatedOrder = window.encodeURIComponent(formatedOrder)
 
          const wpplink = `https://wa.me/+5511959842539?text=${formatedOrder}`
          window.open(wpplink)
+         setShowBackButton(true)
 
       }
 
 
    }
+
+   useEffect(() => {
+
+      const id = localStorage.getItem("adm_id")
+      async function loadInfo() {
+         const response = await instace.get<IDelivery>(`/delivery/${id}`)
+         setDeliveryInfo(response.data)
+
+         setDiscount(ApplyDiscount(response.data, totalItems, cartTotalValue, ""))
+
+      }
+
+      loadInfo()
+
+      return () => {
+         setDeliveryInfo({ condition: "", discount_percentage: "", has_discount: false, parameter: "", tax: "" })
+      }
+   }, [])
 
    return (
       <div className="flex min-h-phoneHeigth flex-col w-full items-center py-8 select-none">
@@ -105,6 +140,18 @@ export default function CustomerInfo() {
 
             }
 
+            <div className="w-full flex flex-col justify-end items-end mr-24 mt-6">
+               <p className="text-secondary-orange text-sm">Taxa de entrega: {BRLReais.format(Number(deliveryInfo?.tax))}</p>
+               {discount > 0 && (
+                  <p className="text-light-gree text-sm">Desconto: - {BRLReais.format(discount)}</p>
+
+               )}
+               <></>
+               <p className="text-light-gree text-sm">Total: {BRLReais.format(cartTotalValue + (Number(deliveryInfo?.tax) - discount))}</p>
+            </div>
+
+
+
             <div className="flex flex-col w-full items-center absolute bottom-0 h-24 justify-between">
                {getLocation ? (
                   <>
@@ -115,11 +162,16 @@ export default function CustomerInfo() {
                      )}
                   </>
                ) : (
-                  <CartButton onClick={sendMessage} numberOfItems={cartContent.length} cartValue={cartTotalValue}>Enviar Pedido</CartButton>
+                  <CartButton onClick={sendMessage} numberOfItems={cartContent.length} cartValue={cartTotalValue + (Number(deliveryInfo?.tax) - discount)}>Enviar Pedido</CartButton>
 
                )
 
                }
+               {showBackButton && (
+                  <CartButton onClick={() => { back() }}>Voltar</CartButton>
+
+               )}
+
 
             </div>
          </main>
