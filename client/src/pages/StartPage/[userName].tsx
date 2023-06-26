@@ -104,26 +104,29 @@ export function StartPage() {
             )}
 
          </div>
-         <div className="mt-24 h-full w-full flex flex-col justify-center items-center">
+         <div className="mt-24 h-full w-full flex flex-col justify-center items-center ">
 
-            {userDetails?.products?.map((product) => {
-               if (product.enabled) {
-                  return (
-                     <div key={product.name} className="flex  flex-row max-w-md border-b-b-1/5 border-b-light-gray-2 mb-2  cursor-pointer w-full py-3 px-2 select-none" onClick={() => { OnClickProduct(product) }}>
-                        <div className="px-5 w-3/4">
-                           <p className="text-dark-gray font-bold mb-2 ">{product.name}</p>
-                           <p className="text-justify font-light text-sm">{product.description}</p>
-                           <p className="mt-3 text-light-gree text-sm">Por apenas: <b> {BRLReais.format(Number(product.price))}</b></p>
+            <div className="w-full max-h-overflow pt-2 overflow-y-scroll">
+               {userDetails?.products?.map((product) => {
+                  if (product.enabled) {
+                     return (
+                        <div key={product.name} className="flex  flex-row max-w-md border-b-b-1/5 border-b-light-gray-2 mb-2  cursor-pointer w-full py-3 px-2 select-none" onClick={() => { OnClickProduct(product) }}>
+                           <div className="px-5 w-3/4">
+                              <p className="text-dark-gray font-bold mb-2 ">{product.name}</p>
+                              <p className="text-justify font-light text-sm">{product.description}</p>
+                              <p className="mt-3 text-light-gree text-sm">Por apenas: <b> {BRLReais.format(Number(product.price))}</b></p>
+                           </div>
+                           <Image width={130} height={120} src={imagePrefixLink + router.query.userName + "/" + product.image_url} alt="image-produto" className="rounded-lg mt-1" />
                         </div>
-                        <Image width={130} height={120} src={imagePrefixLink + router.query.userName + "/" + product.image_url} alt="image-produto" className="rounded-lg mt-1" />
-                     </div>
 
 
-                  )
+                     )
 
-               }
+                  }
 
-            })}
+               })}
+            </div>
+
 
             {
                showItemDetails && (

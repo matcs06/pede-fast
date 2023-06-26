@@ -17,6 +17,10 @@ module.exports = {
       "b-1/5": "0.5px"
     },
 
+    maxHeight: {
+      "overflow": "70svh"
+    },
+
     minHeight: {
       "phoneHeigth": "100svh"
     },

@@ -143,13 +143,13 @@ export default function CustomerInfo() {
             <div className="w-4/5 flex flex-col justify-end items-end mt-6">
                <p className="text-secondary-orange text-sm">Subtotal: {BRLReais.format(cartTotalValue)}</p>
 
-               <p className="text-secondary-orange text-sm">Taxa de entrega: + {BRLReais.format(Number(deliveryInfo?.tax))}</p>
+               <p className="text-secondary-orange text-sm">Taxa de entrega: {BRLReais.format(Number(deliveryInfo?.tax))}</p>
                {discount > 0 && (
-                  <p className="text-light-gree text-sm">Desconto: - {BRLReais.format(discount)}</p>
+                  <p className="text-light-gree text-sm">Desconto: {BRLReais.format(discount)}</p>
 
                )}
 
-               <p className="text-light-gree text-sm">Total: {BRLReais.format(cartTotalValue + (Number(deliveryInfo?.tax) - discount))}</p>
+               <p className="text-secondary-orange text-sm font-bold">Total: {BRLReais.format(cartTotalValue + (Number(deliveryInfo?.tax) - discount))}</p>
             </div>
 
 
@@ -158,7 +158,7 @@ export default function CustomerInfo() {
                {getLocation ? (
                   <>
                      {location !== undefined ? (
-                        <CartButton numberOfItems={cartContent.length} cartValue={cartTotalValue} onClick={sendMessage}>Enviar Pedido</CartButton>) : (
+                        <CartButton numberOfItems={cartContent.length} cartValue={cartTotalValue + (Number(deliveryInfo?.tax) - discount)} onClick={sendMessage}>Enviar Pedido</CartButton>) : (
                         <CartButton onClick={() => { window.alert("Aguarde carregar a localizacao!") }} >Carregando...</CartButton>
 
                      )}
