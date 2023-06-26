@@ -13,7 +13,8 @@ interface IDeliveryConfig {
    has_discount: boolean;
    condition: string;
    parameter: string;
-   discount_percentage: string
+   discount_percentage: string,
+   deactivate_delivery: boolean
 }
 
 export default function Delivery() {
@@ -64,6 +65,7 @@ export default function Delivery() {
             discount_percentage: percentage,
             condition: selectedCondition + "-" + conditionType,
             parameter: paramter,
+            deactivate_delivery: false,
          }, {
             headers: {
                Authorization: "Bearer " + token,
@@ -87,14 +89,16 @@ export default function Delivery() {
             }
          })
 
-         setDeliveryTax(response.data.tax)
-         setCheckBox(response.data.has_discount)
-         setSelectedCondition(response.data.condition.split("-")[0])
-         setConditionType(response.data.condition.split("-")[1])
-         setParameter(response.data.parameter)
-         setPercentage(response.data.discount_percentage)
+         if (response.data) {
+            setDeliveryTax(response.data.tax)
+            setCheckBox(response.data.has_discount)
+            setSelectedCondition(response.data.condition.split("-")[0])
+            setConditionType(response.data.condition.split("-")[1])
+            setParameter(response.data.parameter)
+            setPercentage(response.data.discount_percentage)
 
-         console.log(response.data)
+         }
+
       }
 
       loadConfig()
