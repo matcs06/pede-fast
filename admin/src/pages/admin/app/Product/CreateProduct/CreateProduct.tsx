@@ -133,7 +133,7 @@ export default function CreateProduct({ ...props }: ProductType) {
             formData.append("description", productDescription)
             formData.append("price", productPrice)
             formData.append("user_id", user_id)
-            formData.append("options", JSON.stringify(options))
+            formData.append("options", "")
             formData.append("quantity", productStock)
             formData.append("update_image", update_image)
             formData.append("filename", images[0].file)
