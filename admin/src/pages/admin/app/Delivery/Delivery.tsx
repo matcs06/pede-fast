@@ -69,7 +69,7 @@ export default function Delivery() {
             discount_percentage: percentage,
             condition: selectedCondition + "-" + conditionType,
             parameter: parameter,
-            deactivate_delivery: false,
+            deactivate_delivery: deactivateDelivery,
          }, {
             headers: {
                Authorization: "Bearer " + token,
