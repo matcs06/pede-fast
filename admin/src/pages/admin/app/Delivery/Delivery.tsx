@@ -19,18 +19,18 @@ interface IDeliveryConfig {
 
 export default function Delivery() {
    const [deliveryTax, setDeliveryTax] = useState("")
-   const [checkBox, setCheckBox] = useState(false)
+   const [discountCheckBox, setDiscountCheckBox] = useState(false)
    const [selectedCondition, setSelectedCondition] = useState("")
    const [conditionType, setConditionType] = useState("")
 
-   const [paramter, setParameter] = useState("")
+   const [parameter, setParameter] = useState("")
    const [percentage, setPercentage] = useState("")
 
    const [showDropDown, setShowDropDown] = useState(false)
+   const [deactivateDelivery, setDeactiveDelivery] = useState(false)
 
-   const [showCreateCondition, setShowCreateCondition] = useState(false)
 
-   const username = String(localStorage.getItem("username"))
+   //const username = String(localStorage.getItem("username"))
    const token = String(localStorage.getItem("token"))
    const user_id = String(localStorage.getItem("user_id"))
 
@@ -41,8 +41,12 @@ export default function Delivery() {
    ]
 
 
-   function handleBoxCheck() {
-      setCheckBox(!checkBox)
+   function handleDeactivateDeliveryBoxCheck() {
+      setDeactiveDelivery(!deactivateDelivery)
+   }
+
+   function handleDiscountBoxCheck() {
+      setDiscountCheckBox(!discountCheckBox)
    }
 
    function handleShowDropDown(option: string, type: string) {
@@ -60,11 +64,11 @@ export default function Delivery() {
       try {
          await instace.post("delivery", {
             user_id: user_id,
-            has_discount: checkBox,
+            has_discount: discountCheckBox,
             tax: deliveryTax,
             discount_percentage: percentage,
             condition: selectedCondition + "-" + conditionType,
-            parameter: paramter,
+            parameter: parameter,
             deactivate_delivery: false,
          }, {
             headers: {
@@ -91,11 +95,12 @@ export default function Delivery() {
 
          if (response.data) {
             setDeliveryTax(response.data.tax)
-            setCheckBox(response.data.has_discount)
+            setDiscountCheckBox(response.data.has_discount)
             setSelectedCondition(response.data.condition.split("-")[0])
             setConditionType(response.data.condition.split("-")[1])
             setParameter(response.data.parameter)
             setPercentage(response.data.discount_percentage)
+            setDeactiveDelivery(response.data.deactivate_delivery)
 
          }
 
@@ -104,7 +109,8 @@ export default function Delivery() {
       loadConfig()
 
       return () => {
-         setCheckBox(false)
+         setDiscountCheckBox(false)
+         setDeactiveDelivery(false)
          setDeliveryTax("")
          setSelectedCondition("")
          setConditionType("")
@@ -117,50 +123,60 @@ export default function Delivery() {
 
    return (
       <div className={styles.mainContainer}>
-         <h3>Configurar Entrega e desconto</h3>
-         <div className={styles.deliveryTaxContainer}>
-            <p>Taxa de Entrega: </p>
-            <Input value={deliveryTax} type={"number"} setFieldValue={setDeliveryTax} /> R$
-         </div>
-
+         <h3>Configurar Entrega/Encomenda</h3>
          <div className={styles.diccountToggle}>
 
-            <CheckBox checkBoxLabel={"Desconto:"} checked={checkBox} setChange={handleBoxCheck} />
+            <CheckBox checkBoxLabel={"Somente Encomenda"} checked={deactivateDelivery} setChange={handleDeactivateDeliveryBoxCheck} />
          </div>
 
-         {checkBox && (
-            <div className={styles.condition}>
-               <ul className={styles.dropDownContainer} >
-                  <div className={styles.inputArrowContainer}>
-                     <Input value={`${selectedCondition + "-" + conditionType}`} name={"discount"} type={"text"} placeholder={"Condição"} readOnly={"readonly"} setFieldValue={() => { }} />
-                     <BsFillArrowDownCircleFill size={20} className={styles.arrow} onClick={() => { handleShowDropDown("", "") }} />
-                  </div>
-
-                  {discountConditions.map((option, index) => (
-
-                     <li key={index} style={{ display: showDropDown ? "flex" : "none" }} onClick={() => { handleShowDropDown(option.nome, option.tipo) }}>{option.nome} - ({option.tipo})</li>
-                  ))}
-               </ul>
-
-               <div className={styles.bottomContainer}>
-
-                  <div className={styles.parameterContainer}>
-                     <p>Parametro: </p>
-                     <Input value={paramter} setFieldValue={setParameter} name={"parameter"} />
-                  </div>
-
-                  <div className={styles.parameterContainer}>
-                     <p>Porcentagem: </p>
-                     <Input value={percentage} setFieldValue={setPercentage} name={"parameter"} type={"number"} />
-                  </div>
-                  <span>Se o {selectedCondition} for {conditionType} a {paramter} então descontará {percentage}% da taxa de entrega</span>
-
+         {!deactivateDelivery && (
+            <>
+               <div className={styles.deliveryTaxContainer}>
+                  <p>Taxa de Entrega: </p>
+                  <Input value={deliveryTax} type={"number"} setFieldValue={setDeliveryTax} /> R$
                </div>
 
+               <div className={styles.diccountToggle}>
 
-            </div>
+                  <CheckBox checkBoxLabel={"Desconto:"} checked={discountCheckBox} setChange={handleDiscountBoxCheck} />
+               </div>
 
+               {discountCheckBox && (
+                  <div className={styles.condition}>
+                     <ul className={styles.dropDownContainer} >
+                        <div className={styles.inputArrowContainer}>
+                           <Input value={`${selectedCondition + "-" + conditionType}`} name={"discount"} type={"text"} placeholder={"Condição"} readOnly={"readonly"} setFieldValue={() => { }} />
+                           <BsFillArrowDownCircleFill size={20} className={styles.arrow} onClick={() => { handleShowDropDown("", "") }} />
+                        </div>
+
+                        {discountConditions.map((option, index) => (
+
+                           <li key={index} style={{ display: showDropDown ? "flex" : "none" }} onClick={() => { handleShowDropDown(option.nome, option.tipo) }}>{option.nome} - ({option.tipo})</li>
+                        ))}
+                     </ul>
+
+                     <div className={styles.bottomContainer}>
+
+                        <div className={styles.parameterContainer}>
+                           <p>Parametro: </p>
+                           <Input value={parameter} setFieldValue={setParameter} name={"parameter"} />
+                        </div>
+
+                        <div className={styles.parameterContainer}>
+                           <p>Porcentagem: </p>
+                           <Input value={percentage} setFieldValue={setPercentage} name={"parameter"} type={"number"} />
+                        </div>
+                        <span>Se o {selectedCondition} for {conditionType} a {parameter} então descontará {percentage}% da taxa de entrega</span>
+
+                     </div>
+
+
+                  </div>
+
+               )}
+            </>
          )}
+
          <div className={styles.buttonContainer}>
             <Button handleClick={onSaveDeliverySetup}>Salvar</Button>
          </div>
