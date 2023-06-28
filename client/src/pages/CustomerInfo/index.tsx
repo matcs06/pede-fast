@@ -4,7 +4,6 @@ import PhoneInput from "@/components/PhoneInput";
 import { useCartContext } from "@/context/Context";
 import { BRLReais } from "@/utils/currencyFormat";
 import IsNumber from "@/utils/isNumber";
-import { TIMEOUT } from "dns";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react"
 import { GrLocation } from "react-icons/gr"
@@ -22,16 +21,37 @@ interface IDelivery {
    deactivate_delivery: boolean
 }
 
+interface IUserInfo {
+   customerName: string;
+   customerAddress: string;
+   customerPhone: string;
+   addressExtraInfo: string;
+}
+
 export default function CustomerInfo() {
 
    const { back } = useRouter();
 
    const [cartContent, setCartContent] = useCartContext()
 
-   const [customerName, setCustomerName] = useState("")
-   const [customerPhone, setCustomerPhone] = useState("")
-   const [customerAddress, setCustomerAddress] = useState("")
-   const [addressExtraInfo, setAddressExtraInfo] = useState("")
+   let customerDefaultInfo: IUserInfo = { addressExtraInfo: "", customerAddress: "", customerName: "", customerPhone: "" }
+   if (typeof window !== 'undefined') {
+      customerDefaultInfo = JSON.parse(localStorage.getItem("customer_info") || "{}")
+
+   }
+
+   if (customerDefaultInfo == null) {
+      localStorage.setItem("customer_info", "{}")
+      customerDefaultInfo = { addressExtraInfo: "", customerAddress: "", customerName: "", customerPhone: "" }
+   }
+
+
+
+
+   const [customerName, setCustomerName] = useState(customerDefaultInfo.customerName)
+   const [customerPhone, setCustomerPhone] = useState(customerDefaultInfo.customerPhone)
+   const [customerAddress, setCustomerAddress] = useState(customerDefaultInfo.customerAddress)
+   const [addressExtraInfo, setAddressExtraInfo] = useState(customerDefaultInfo.addressExtraInfo)
    const [location, setLocation] = useState<GeolocationPosition>()
    const [businesAddress, setBusinessAddress] = useState<any>("")
 
@@ -82,26 +102,19 @@ export default function CustomerInfo() {
 
 
          let locationLink = ""
+         let deliveryTax = ""
+         let deliveryInformation = ""
+         //Apenas se a entrega estiver ativa
          if (!deliveryInfo?.deactivate_delivery) {
             locationLink = location?.coords.latitude ? `https://www.google.com/maps?q=${location?.coords.latitude},${location?.coords.longitude}&z=17&hl=pt-BR` : ""
+            deliveryTax = Number(deliveryInfo?.tax) - Number(discount) > 0 ? "\n*Taxa de Entrega: " + BRLReais.format((Number(deliveryInfo?.tax) - discount)) + "*" : ""
+            deliveryInformation = "\nEndereço de Entrega: \n" + customerAddress + "\nComplemento: " + addressExtraInfo
          }
 
          const customerInfoMessage = `Nome: ${customerName}\nContato: ${customerPhone}\n\n`
          const cartMessage: IOrderProducts[] = cartContent
-         let deliveryTax = ""
-
-         //Apenas enviar informacao de entrega se a entrega estiver aberta
-         if (!deliveryInfo?.deactivate_delivery) {
-            deliveryTax = Number(deliveryInfo?.tax) - Number(discount) > 0 ? "\n*Taxa de Entrega: " + BRLReais.format((Number(deliveryInfo?.tax) - discount)) + "*" : ""
-         }
 
          const totalOrderPrice = "\n*Total: " + BRLReais.format(cartTotalValue + deliveryTaxAmmount) + "*\n"
-
-         //Apenas enviar informacao de entrega se a entrega estiver aberta
-         let deliveryInformation = ""
-         if (!deliveryInfo?.deactivate_delivery) {
-            deliveryInformation = "\nEndereço de Entrega: \n" + customerAddress + "\nComplemento: " + addressExtraInfo
-         }
 
          let formatedOrder = customerInfoMessage + FormatMessage(cartMessage) + deliveryTax + totalOrderPrice + deliveryInformation + "\n" + locationLink
 
@@ -147,12 +160,12 @@ export default function CustomerInfo() {
       <div className="flex min-h-phoneHeigth flex-col w-full items-center py-8 select-none">
          <h3 className="text-secondary-orange ">Informacões da entrega</h3>
          <main className="w-full flex flex-col items-center pt-9">
-            <Input placeholder="Nome Completo" setValue={setCustomerName} />
-            <PhoneInput placeholder="Número (WhatsApp)" setValue={setCustomerPhone} />
+            <Input placeholder="Nome Completo" setValue={setCustomerName} value={customerName} />
+            <PhoneInput placeholder="Número (WhatsApp)" setValue={setCustomerPhone} value={customerPhone} />
             {!deliveryInfo?.deactivate_delivery && (
                <>
-                  <Input placeholder="Endereço. Ex: Rua, bairo, N" setValue={setCustomerAddress} />
-                  <Input placeholder="Complemento. Ex: Em frente a" setValue={setAddressExtraInfo} />
+                  <Input placeholder="Endereço. Ex: Rua, bairo, N" setValue={setCustomerAddress} value={customerAddress} />
+                  <Input placeholder="Complemento. Ex: Em frente a" setValue={setAddressExtraInfo} value={addressExtraInfo} />
                </>
 
             )}
