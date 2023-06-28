@@ -18,7 +18,8 @@ interface IDelivery {
    has_discount: boolean;
    condition: string;
    parameter: string;
-   discount_percentage: string
+   discount_percentage: string,
+   deactivate_delivery: boolean
 }
 
 export default function CustomerInfo() {
@@ -32,6 +33,7 @@ export default function CustomerInfo() {
    const [customerAddress, setCustomerAddress] = useState("")
    const [addressExtraInfo, setAddressExtraInfo] = useState("")
    const [location, setLocation] = useState<GeolocationPosition>()
+   const [businesAddress, setBusinessAddress] = useState<any>("")
 
    const [getLocation, setGetLocation] = useState(false)
 
@@ -41,8 +43,10 @@ export default function CustomerInfo() {
    const cartTotalValue = cartContent.reduce((acc: number, cart: IOrderProducts) => acc + cart.productOrderPrice, 0)
    const totalItems = cartContent.reduce((acc: number, cart: IOrderProducts) => acc + cart.productQuantity, 0)
    const [discount, setDiscount] = useState(0)
+   const [deliveryTaxAmmount, setDeliveTaxAmmount] = useState(0)
 
    async function getCurrentLocation() {
+
       setGetLocation(true)
       navigator.geolocation.getCurrentPosition(location => {
          setLocation(location)
@@ -52,11 +56,15 @@ export default function CustomerInfo() {
    }
 
    function sendMessage() {
+      let informAddress = false
+      if (!deliveryInfo?.deactivate_delivery && customerAddress === "") {
+         informAddress = true //Flag paga caso precise informar o endereço
+      }
 
       if (customerName === "" ||
-         customerAddress === "" ||
-         customerPhone === "") {
-         window.alert("Preencha os campos são obrigatórios: Nome, Telefone e Endereço!")
+         customerPhone === "" ||
+         informAddress) {
+         window.alert("Preencha os campos são obrigatórios: Nome, Telefone, endereço")
       } else {
 
          const customerNumberUnformated = customerPhone.split("").filter((item: string) => IsNumber(item)).join("")
@@ -73,14 +81,27 @@ export default function CustomerInfo() {
          localStorage.setItem("customer_info", JSON.stringify(customerInfo))
 
 
-         const locationLink = location?.coords.latitude ? `https://www.google.com/maps?q=${location?.coords.latitude},${location?.coords.longitude}&z=17&hl=pt-BR` : ""
+         let locationLink = ""
+         if (!deliveryInfo?.deactivate_delivery) {
+            locationLink = location?.coords.latitude ? `https://www.google.com/maps?q=${location?.coords.latitude},${location?.coords.longitude}&z=17&hl=pt-BR` : ""
+         }
 
          const customerInfoMessage = `Nome: ${customerName}\nContato: ${customerPhone}\n\n`
          const cartMessage: IOrderProducts[] = cartContent
-         const deliveryTax = Number(deliveryInfo?.tax) - Number(discount) > 0 ? "\n*Taxa de Entrega: " + BRLReais.format((Number(deliveryInfo?.tax) - discount)) + "*" : ""
-         const totalOrderPrice = "\n*Total: " + BRLReais.format(cartTotalValue + (Number(deliveryInfo?.tax) - discount)) + "*\n"
-         const deliveryInformation = "\nEndereço de Entrega: \n" + customerAddress + "\nComplemento: " + addressExtraInfo
+         let deliveryTax = ""
 
+         //Apenas enviar informacao de entrega se a entrega estiver aberta
+         if (!deliveryInfo?.deactivate_delivery) {
+            deliveryTax = Number(deliveryInfo?.tax) - Number(discount) > 0 ? "\n*Taxa de Entrega: " + BRLReais.format((Number(deliveryInfo?.tax) - discount)) + "*" : ""
+         }
+
+         const totalOrderPrice = "\n*Total: " + BRLReais.format(cartTotalValue + deliveryTaxAmmount) + "*\n"
+
+         //Apenas enviar informacao de entrega se a entrega estiver aberta
+         let deliveryInformation = ""
+         if (!deliveryInfo?.deactivate_delivery) {
+            deliveryInformation = "\nEndereço de Entrega: \n" + customerAddress + "\nComplemento: " + addressExtraInfo
+         }
 
          let formatedOrder = customerInfoMessage + FormatMessage(cartMessage) + deliveryTax + totalOrderPrice + deliveryInformation + "\n" + locationLink
 
@@ -98,20 +119,29 @@ export default function CustomerInfo() {
    useEffect(() => {
 
       const id = localStorage.getItem("adm_id")
+      const business_address = localStorage.getItem("business_address")
       async function loadInfo() {
          const response = await instace.get<IDelivery>(`/delivery/${id}`)
          setDeliveryInfo(response.data)
 
          setDiscount(ApplyDiscount(response.data, totalItems, cartTotalValue, ""))
 
+         if (!response.data.deactivate_delivery) {
+            setDeliveTaxAmmount(Number(response.data.tax) - ApplyDiscount(response.data, totalItems, cartTotalValue, ""))
+
+         }
+
+
       }
+      setBusinessAddress(business_address)
+
 
       loadInfo()
 
       return () => {
-         setDeliveryInfo({ condition: "", discount_percentage: "", has_discount: false, parameter: "", tax: "" })
+         setDeliveryInfo({ condition: "", discount_percentage: "", has_discount: false, parameter: "", tax: "", deactivate_delivery: false })
       }
-   }, [])
+   }, [cartTotalValue, totalItems])
 
    return (
       <div className="flex min-h-phoneHeigth flex-col w-full items-center py-8 select-none">
@@ -119,14 +149,23 @@ export default function CustomerInfo() {
          <main className="w-full flex flex-col items-center pt-9">
             <Input placeholder="Nome Completo" setValue={setCustomerName} />
             <PhoneInput placeholder="Número (WhatsApp)" setValue={setCustomerPhone} />
-            <Input placeholder="Endereço. Ex: Rua, bairo, N" setValue={setCustomerAddress} />
-            <Input placeholder="Complemento. Ex: Em frente a" setValue={setAddressExtraInfo} />
+            {!deliveryInfo?.deactivate_delivery && (
+               <>
+                  <Input placeholder="Endereço. Ex: Rua, bairo, N" setValue={setCustomerAddress} />
+                  <Input placeholder="Complemento. Ex: Em frente a" setValue={setAddressExtraInfo} />
+               </>
+
+            )}
+
 
             <span className="mt-3 text-xs font-extralight">Quer informar sua Localização de forma mais precisa?</span>
-            <button onClick={getCurrentLocation}
-               className="flex items-center shadow-sm justify-evenly bg-light-gray-2 w-48 text-opacity-70 rounded-md text-xs p-2 cursor-pointer hover:opacity-90 transition-opacity ease-in-out" >
-               Enviar localização atual <GrLocation size={15} />
-            </button>
+            {!deliveryInfo?.deactivate_delivery && (
+               <button onClick={getCurrentLocation}
+                  className="flex items-center shadow-sm justify-evenly bg-light-gray-2 w-48 text-opacity-70 rounded-md text-xs p-2 cursor-pointer hover:opacity-90 transition-opacity ease-in-out" >
+                  Enviar localização atual <GrLocation size={15} />
+               </button>
+            )}
+
             {getLocation && (
                <>
                   {location !== undefined ? (
@@ -140,17 +179,27 @@ export default function CustomerInfo() {
 
             }
 
-            <div className="w-4/5 flex flex-col justify-end items-end mt-6">
-               <p className="text-secondary-orange text-sm">Subtotal: {BRLReais.format(cartTotalValue)}</p>
+            {deliveryInfo?.deactivate_delivery ? (
+               <div className="mt-4 flex justify-center items-center flex-col">
+                  <p className="text-secondary-orange text-sm">Esta loja está aberta apenas para encomendas</p>
+                  <p className="text-secondary-orange text-sm">Retire seu pedido no nosso Endereço:</p>
+                  <p className="text-light-gree text-sm">{businesAddress}</p>
 
-               <p className="text-secondary-orange text-sm">Taxa de entrega: {BRLReais.format(Number(deliveryInfo?.tax))}</p>
-               {discount > 0 && (
-                  <p className="text-light-gree text-sm">Desconto: {BRLReais.format(discount)}</p>
+               </div>
+            ) : (
+               <div className="w-4/5 flex flex-col justify-end items-end mt-6">
+                  <p className="text-secondary-orange text-sm">Subtotal: {BRLReais.format(cartTotalValue)}</p>
 
-               )}
+                  <p className="text-secondary-orange text-sm">Taxa de entrega: {BRLReais.format(Number(deliveryInfo?.tax))}</p>
+                  {discount > 0 && (
+                     <p className="text-light-gree text-sm">Desconto: {BRLReais.format(discount)}</p>
 
-               <p className="text-secondary-orange text-sm font-bold">Total: {BRLReais.format(cartTotalValue + (Number(deliveryInfo?.tax) - discount))}</p>
-            </div>
+                  )}
+
+                  <p className="text-secondary-orange text-sm font-bold">Total: {BRLReais.format(cartTotalValue + deliveryTaxAmmount)}</p>
+               </div>
+            )}
+
 
 
 
@@ -158,13 +207,13 @@ export default function CustomerInfo() {
                {getLocation ? (
                   <>
                      {location !== undefined ? (
-                        <CartButton numberOfItems={cartContent.length} cartValue={cartTotalValue + (Number(deliveryInfo?.tax) - discount)} onClick={sendMessage}>Enviar Pedido</CartButton>) : (
+                        <CartButton numberOfItems={cartContent.length} cartValue={cartTotalValue + deliveryTaxAmmount} onClick={sendMessage}>Enviar Pedido</CartButton>) : (
                         <CartButton onClick={() => { window.alert("Aguarde carregar a localizacao!") }} >Carregando...</CartButton>
 
                      )}
                   </>
                ) : (
-                  <CartButton onClick={sendMessage} numberOfItems={cartContent.length} cartValue={cartTotalValue + (Number(deliveryInfo?.tax) - discount)}>Enviar Pedido</CartButton>
+                  <CartButton onClick={sendMessage} numberOfItems={cartContent.length} cartValue={cartTotalValue + deliveryTaxAmmount}>Enviar Pedido</CartButton>
 
                )
 

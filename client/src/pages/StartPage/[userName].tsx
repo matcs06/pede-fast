@@ -32,6 +32,7 @@ interface IUser {
    phone: string;
    business_name: string;
    business_image_url: string;
+   address: string;
    store_status: "opened" | "closed";
    products: IProduct[]
 }
@@ -68,6 +69,7 @@ export function StartPage() {
          localStorage.setItem("adm_id", response.data.id)
          localStorage.setItem("adm_phone", response.data.phone)
          localStorage.setItem("business_image_url", response.data.business_image_url)
+         localStorage.setItem("business_address", response.data.address)
 
       }
 
