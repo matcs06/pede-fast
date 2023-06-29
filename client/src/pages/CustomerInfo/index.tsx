@@ -35,8 +35,11 @@ export default function CustomerInfo() {
    const [cartContent, setCartContent] = useCartContext()
 
    let customerDefaultInfo: IUserInfo = { addressExtraInfo: "", customerAddress: "", customerName: "", customerPhone: "" }
+   let adminPhone: any = ""
    if (typeof window !== 'undefined') {
       customerDefaultInfo = JSON.parse(localStorage.getItem("customer_info") || "{}")
+
+      adminPhone = localStorage.getItem("adm_phone")
 
    }
 
@@ -120,7 +123,7 @@ export default function CustomerInfo() {
 
          formatedOrder = window.encodeURIComponent(formatedOrder)
 
-         const wpplink = `https://wa.me/+5511959842539?text=${formatedOrder}`
+         const wpplink = `https://wa.me/+55${adminPhone}?text=${formatedOrder}`
          window.open(wpplink)
          setShowBackButton(true)
 
@@ -137,10 +140,17 @@ export default function CustomerInfo() {
          const response = await instace.get<IDelivery>(`/delivery/${id}`)
          setDeliveryInfo(response.data)
 
-         setDiscount(ApplyDiscount(response.data, totalItems, cartTotalValue, ""))
+         if (response.data.has_discount) {
+            setDiscount(ApplyDiscount(response.data, totalItems, cartTotalValue, ""))
+         }
 
          if (!response.data.deactivate_delivery) {
-            setDeliveTaxAmmount(Number(response.data.tax) - ApplyDiscount(response.data, totalItems, cartTotalValue, ""))
+            if (!response.data.has_discount) {
+               setDeliveTaxAmmount(Number(response.data.tax))
+            } else {
+
+               setDeliveTaxAmmount(Number(response.data.tax) - ApplyDiscount(response.data, totalItems, cartTotalValue, ""))
+            }
 
          }
 

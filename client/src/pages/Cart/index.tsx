@@ -13,8 +13,10 @@ export default function Cart() {
    const AddOrRemove = useSubTractOrAdd()
    const { push, back } = useRouter();
    const cartTotalValue = cartContent.reduce((acc: number, cart: IOrderProducts) => acc + cart.productOrderPrice, 0)
-
-   const userName = localStorage.getItem("user_name");
+   let userName: any = ""
+   if (typeof window !== 'undefined') {
+      userName = localStorage.getItem("user_name");
+   }
    const imagePrefixLink = "http://localhost:3333/files/"
 
 

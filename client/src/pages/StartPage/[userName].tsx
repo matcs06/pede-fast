@@ -108,7 +108,7 @@ export function StartPage() {
          </div>
          <div className="mt-24 h-full w-full flex flex-col justify-center items-center ">
 
-            <div className="w-full flex justify-center max-h-overflow pt-2 overflow-y-scroll">
+            <div className="w-full flex flex-col  items-center max-h-overflow pt-2 overflow-y-scroll">
                {userDetails?.products?.map((product) => {
                   if (product.enabled) {
                      return (

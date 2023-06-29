@@ -143,7 +143,7 @@ export default function ItemDetail(productModel: IProductType) {
             <div className="justify-between mt-3 items-stretch ml-2 px-1">
                <p className="text-secondary-orange font-bold mb-1 select-none ">{productModel.name}</p>
                <p className="text-dark-gray text-xs font-light mb-1 select-none ">{productModel.description}</p>
-               <p className="text-dark-gray font-inter text-sm font-bold select-none">R$ {productModel.price}</p>
+               <p className="text-dark-gray font-inter text-sm font-bold select-none">{BRLReais.format(Number(productModel.price))}</p>
 
             </div>
 
