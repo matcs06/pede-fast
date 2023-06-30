@@ -22,7 +22,8 @@ module.exports = {
     },
 
     minHeight: {
-      "phoneHeigth": "100svh"
+      "phoneHeigth": "100svh",
+      "cartItemHeigth": "16svh"
     },
     colors: {
       "light-gray": "#F5F5F5",
