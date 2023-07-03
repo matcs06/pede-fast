@@ -89,7 +89,6 @@ export default function Store() {
          const imagePrefixLink = `http://localhost:3333/files/${usernameload}/profile/`
          setStoreImageUrl(imagePrefixLink + response.data.business_image_url)
 
-         console.log(imagePrefixLink + response.data.business_image_url)
       }
 
       loadUserInfo()

@@ -90,7 +90,6 @@ export default function ProductList() {
             setProductListApi(response.data)
          } catch (error) {
             window.alert("erro ao listar produtos")
-            console.log(error)
          }
       }
 

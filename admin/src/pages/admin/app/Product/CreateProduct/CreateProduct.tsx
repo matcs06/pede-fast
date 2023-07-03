@@ -102,7 +102,6 @@ export default function CreateProduct({ ...props }: ProductType) {
          })
          window.alert(`Produto removido com sucesso`);
       } catch (error) {
-         console.log(error)
          window.alert(`erro ao remover produto`);
       }
 
@@ -111,12 +110,10 @@ export default function CreateProduct({ ...props }: ProductType) {
    }
 
    async function handleCreateUpdateProduct() {
-      console.log("clicado no botao")
 
       const formData = new FormData()
 
       const update_image = images[0] == null ? "no" : "yes"
-      console.log(update_image)
       if (images[0] == null) {
          const imagesdata = {
             file: "fake",
@@ -178,7 +175,6 @@ export default function CreateProduct({ ...props }: ProductType) {
             window.alert(`Produto ${productName} atualizado com sucesso`);
 
          } catch (error) {
-            console.log(error)
             window.alert(
 
                "erro ao criar novo produto: Verifique se está logado ou produtos com o mesmo nome e tente novamente"
