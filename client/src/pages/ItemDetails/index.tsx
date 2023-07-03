@@ -36,7 +36,7 @@ export default function ItemDetail(productModel: IProductType) {
 
    function saveToCartContext() {
       const newProduct: IOrderProducts = {
-         id: v4(),
+         id: productModel.id,
          productName: productModel.name,
          productQuantity: productQuantiy,
          productOrderPrice: productPrice,

@@ -6,7 +6,7 @@ interface ChoosedOptions {
 }
 
 export interface IOrderProducts {
-   id: string,
+   id?: string,
    productName?: string,
    productQuantity: number,
    productOrderPrice: number,
@@ -30,6 +30,7 @@ interface CreatedOptionType {
 }
 
 export interface IProductType {
+   id?: string,
    name?: string,
    description?: string,
    price?: string,

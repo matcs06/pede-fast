@@ -110,7 +110,7 @@ export function StartPage() {
 
             <div className="w-full flex flex-col  items-center max-h-overflow pt-2 overflow-y-scroll">
                {userDetails?.products?.map((product) => {
-                  if (product.enabled) {
+                  if (product.enabled && Number(product.quantity) > 0) {
                      return (
                         <div key={product.name} className="flex  flex-row max-w-md border-b-b-1/5 border-b-light-gray-2 mb-2  cursor-pointer w-full py-3 px-2 select-none" onClick={() => { OnClickProduct(product) }}>
                            <div className="px-5 w-3/4">
@@ -137,6 +137,7 @@ export function StartPage() {
                         <AiFillCloseCircle size={30} />
                      </div>
                      <ItemDetail
+                        id={selectedProduct?.id}
                         name={selectedProduct?.name}
                         description={selectedProduct?.description}
                         image_url={selectedProduct?.image_url}
@@ -155,6 +156,7 @@ export function StartPage() {
                <CartButton onClick={() => { push("/Cart") }} numberOfItems={myCart.length} cartValue={cartTotalValue}>Continuar</CartButton>
             </div>
          )}
+
 
 
       </div>

@@ -34,22 +34,26 @@ export default function CustomerInfo() {
 
    const [cartContent, setCartContent] = useCartContext()
 
+   let orderdProdIdsAndQuantity = "";
+
+   cartContent.map((content: IOrderProducts) => {
+      orderdProdIdsAndQuantity = orderdProdIdsAndQuantity + `${content.id} | ${content.productQuantity},`
+   })
+
    let customerDefaultInfo: IUserInfo = { addressExtraInfo: "", customerAddress: "", customerName: "", customerPhone: "" }
    let adminPhone: any = ""
+   let adminUserId: any = ""
    if (typeof window !== 'undefined') {
       customerDefaultInfo = JSON.parse(localStorage.getItem("customer_info") || "{}")
 
       adminPhone = localStorage.getItem("adm_phone")
-
+      adminUserId = localStorage.getItem("adm_id")
    }
 
    if (customerDefaultInfo == null) {
       localStorage.setItem("customer_info", "{}")
       customerDefaultInfo = { addressExtraInfo: "", customerAddress: "", customerName: "", customerPhone: "" }
    }
-
-
-
 
    const [customerName, setCustomerName] = useState(customerDefaultInfo.customerName)
    const [customerPhone, setCustomerPhone] = useState(customerDefaultInfo.customerPhone)
@@ -77,8 +81,7 @@ export default function CustomerInfo() {
 
 
    }
-
-   function sendMessage() {
+   async function sendMessage() {
       let informAddress = false
       if (!deliveryInfo?.deactivate_delivery && customerAddress === "") {
          informAddress = true //Flag paga caso precise informar o endereço
@@ -101,31 +104,45 @@ export default function CustomerInfo() {
             longitude: location?.coords.longitude
          }
 
-         localStorage.setItem("customer_info", JSON.stringify(customerInfo))
+         try {
+            await instace.post("/order", {
+               adm_user_id: adminUserId,
+               customer_name: customerName,
+               customer_phone: customerNumberUnformated,
+               customer_address: customerAddress + "/" + addressExtraInfo,
+               products_ids: orderdProdIdsAndQuantity.slice(0, -1)
+            })
+
+            localStorage.setItem("customer_info", JSON.stringify(customerInfo))
 
 
-         let locationLink = ""
-         let deliveryTax = ""
-         let deliveryInformation = ""
-         //Apenas se a entrega estiver ativa
-         if (!deliveryInfo?.deactivate_delivery) {
-            locationLink = location?.coords.latitude ? `https://www.google.com/maps?q=${location?.coords.latitude},${location?.coords.longitude}&z=17&hl=pt-BR` : ""
-            deliveryTax = Number(deliveryInfo?.tax) - Number(discount) > 0 ? "\n*Taxa de Entrega: " + BRLReais.format((Number(deliveryInfo?.tax) - discount)) + "*" : ""
-            deliveryInformation = "\nEndereço de Entrega: \n" + customerAddress + "\nComplemento: " + addressExtraInfo
+            let locationLink = ""
+            let deliveryTax = ""
+            let deliveryInformation = ""
+            //Apenas se a entrega estiver ativa
+            if (!deliveryInfo?.deactivate_delivery) {
+               locationLink = location?.coords.latitude ? `https://www.google.com/maps?q=${location?.coords.latitude},${location?.coords.longitude}&z=17&hl=pt-BR` : ""
+               deliveryTax = Number(deliveryInfo?.tax) - Number(discount) > 0 ? "\n*Taxa de Entrega: " + BRLReais.format((Number(deliveryInfo?.tax) - discount)) + "*" : ""
+               deliveryInformation = "\nEndereço de Entrega: \n" + customerAddress + "\nComplemento: " + addressExtraInfo
+            }
+
+            const customerInfoMessage = `Nome: ${customerName}\nContato: ${customerPhone}\n\n`
+            const cartMessage: IOrderProducts[] = cartContent
+
+            const totalOrderPrice = "\n*Total: " + BRLReais.format(cartTotalValue + deliveryTaxAmmount) + "*\n"
+
+            let formatedOrder = customerInfoMessage + FormatMessage(cartMessage) + deliveryTax + totalOrderPrice + deliveryInformation + "\n" + locationLink
+
+            formatedOrder = window.encodeURIComponent(formatedOrder)
+
+            const wpplink = `https://wa.me/+55${adminPhone}?text=${formatedOrder}`
+            window.open(wpplink)
+            setShowBackButton(true)
+
+            window.alert("Pedido realizado com sucesso!")
+         } catch (error) {
+            window.alert("Erro ao realizar pedido, tente novamente!")
          }
-
-         const customerInfoMessage = `Nome: ${customerName}\nContato: ${customerPhone}\n\n`
-         const cartMessage: IOrderProducts[] = cartContent
-
-         const totalOrderPrice = "\n*Total: " + BRLReais.format(cartTotalValue + deliveryTaxAmmount) + "*\n"
-
-         let formatedOrder = customerInfoMessage + FormatMessage(cartMessage) + deliveryTax + totalOrderPrice + deliveryInformation + "\n" + locationLink
-
-         formatedOrder = window.encodeURIComponent(formatedOrder)
-
-         const wpplink = `https://wa.me/+55${adminPhone}?text=${formatedOrder}`
-         window.open(wpplink)
-         setShowBackButton(true)
 
       }
 
@@ -249,6 +266,9 @@ export default function CustomerInfo() {
 
             </div>
          </main>
+         <div className="flex absolute bg-secondary-orange top-1/3 w-52 h-40 p-8 justify-center items-center rounded-md ">
+            <p className="text-primary-bk flex justify-start items-center">Seu pedido foi enviado com sucesso!!</p>
+         </div>
       </div >
    )
 }
