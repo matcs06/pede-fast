@@ -1,8 +1,10 @@
 import { useContext, createContext, useState } from "react";
 import { IOrderProducts } from "./types";
 
-export const CartContext = createContext([]) as any
-export const SubTractOrAdd = createContext([]) as any
+const CartContext = createContext([]) as any
+const SubTractOrAdd = createContext([]) as any
+const ResetCart = createContext([]) as any
+
 
 export function useCartContext(): any {
    return useContext(CartContext)
@@ -10,6 +12,10 @@ export function useCartContext(): any {
 
 export function useSubTractOrAdd(): any {
    return useContext(SubTractOrAdd)
+}
+
+export function useResetCart(): any {
+   return useContext(ResetCart)
 }
 
 export function MyCartContextWrapper({ children }: any) {
@@ -62,12 +68,17 @@ export function MyCartContextWrapper({ children }: any) {
 
    }
 
+   function resetCart() {
+      setMyCart([])
+   }
+
    return (
       <CartContext.Provider value={[myCart, updateCart]}>
          <SubTractOrAdd.Provider value={subtractOrAdd}>
-            {children}
+            <ResetCart.Provider value={resetCart}>
+               {children}
+            </ResetCart.Provider>
          </SubTractOrAdd.Provider>
-
       </CartContext.Provider>
    )
 

@@ -44,6 +44,7 @@ export function StartPage() {
    const router = useRouter()
 
 
+
    const [showItemDetails, setShowItemDetails] = useState(false)
    const [selectedProduct, setSelectedProdut] = useState<IProduct>()
 
@@ -52,6 +53,11 @@ export function StartPage() {
    const cartTotalValue = myCart.reduce((acc: number, cart: IOrderProducts) => acc + cart.productOrderPrice, 0)
 
    const imagePrefixLink = "http://localhost:3333/files/"
+
+   let business_image_url: any = ""
+   if (typeof window !== 'undefined') {
+      business_image_url = localStorage.getItem("business_image_url")
+   }
 
    function OnClickProduct(product: IProduct) {
       setShowItemDetails(true)
@@ -93,7 +99,7 @@ export function StartPage() {
          <header className="bg-secondary-orange h-28 w-full">
          </header>
          <div className="w-40 absolute top-10 rounded-lg  flex flex-col justify-center items-center shadow-dark-gray shadow-md	 bg-light-gray h-28 justify-self-center">
-            <Image width={90} height={90} src={imagePrefixLink + router.query.userName + "/" + "profile/" + userDetails?.business_image_url} alt="image-produto" className="rounded-lg mt-1  w-40 h-36 m-0" />
+            <Image width={90} height={90} src={imagePrefixLink + router.query.userName + "/" + "profile/" + (userDetails?.business_image_url || business_image_url)} alt="image-produto" className="rounded-lg mt-1  w-40 h-36 m-0" />
 
             {userDetails?.store_status == "opened" ? (
                <div className="w-1/2 flex text-primary-bk cursor-pointer justify-center bg-light-gree h-6 absolute top-28 rounded-lg z-10 ">

@@ -1,4 +1,4 @@
-import { SubTractOrAdd, useCartContext, useSubTractOrAdd } from "@/context/Context"
+import { useCartContext, useSubTractOrAdd } from "@/context/Context"
 import { BRLReais } from "@/utils/currencyFormat"
 import Image from "next/image"
 import { IOrderProducts } from "./types"

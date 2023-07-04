@@ -1,7 +1,7 @@
 import CartButton from "@/components/CartButton"
 import Input from "@/components/Input"
 import PhoneInput from "@/components/PhoneInput";
-import { useCartContext } from "@/context/Context";
+import { useCartContext, useResetCart } from "@/context/Context";
 import { BRLReais } from "@/utils/currencyFormat";
 import IsNumber from "@/utils/isNumber";
 import { useRouter } from "next/router";
@@ -30,9 +30,10 @@ interface IUserInfo {
 
 export default function CustomerInfo() {
 
-   const { back } = useRouter();
+   const { back, push } = useRouter();
 
    const [cartContent, setCartContent] = useCartContext()
+   const resetCart = useResetCart()
 
    let orderdProdIdsAndQuantity = "";
 
@@ -43,11 +44,13 @@ export default function CustomerInfo() {
    let customerDefaultInfo: IUserInfo = { addressExtraInfo: "", customerAddress: "", customerName: "", customerPhone: "" }
    let adminPhone: any = ""
    let adminUserId: any = ""
+   let user_name: any = ""
    if (typeof window !== 'undefined') {
       customerDefaultInfo = JSON.parse(localStorage.getItem("customer_info") || "{}")
 
       adminPhone = localStorage.getItem("adm_phone")
       adminUserId = localStorage.getItem("adm_id")
+      user_name = localStorage.getItem("user_name")
    }
 
    if (customerDefaultInfo == null) {
@@ -138,8 +141,6 @@ export default function CustomerInfo() {
             const wpplink = `https://wa.me/+55${adminPhone}?text=${formatedOrder}`
             window.open(wpplink)
             setShowBackButton(true)
-
-            window.alert("Pedido realizado com sucesso!")
          } catch (error) {
             window.alert("Erro ao realizar pedido, tente novamente!")
          }
@@ -182,6 +183,11 @@ export default function CustomerInfo() {
          setDeliveryInfo({ condition: "", discount_percentage: "", has_discount: false, parameter: "", tax: "", deactivate_delivery: false })
       }
    }, [cartTotalValue, totalItems])
+
+   function onSucessOrder() {
+      resetCart()
+      push(`/StartPage/${user_name}`)
+   }
 
    return (
       <div className="flex min-h-phoneHeigth flex-col w-full items-center py-8 select-none">
@@ -258,17 +264,19 @@ export default function CustomerInfo() {
                )
 
                }
-               {showBackButton && (
-                  <CartButton onClick={() => { back() }}>Voltar</CartButton>
-
-               )}
-
 
             </div>
          </main>
-         <div className="flex absolute bg-secondary-orange top-1/3 w-52 h-40 p-8 justify-center items-center rounded-md ">
-            <p className="text-primary-bk flex justify-start items-center">Seu pedido foi enviado com sucesso!!</p>
-         </div>
+         {showBackButton && (
+            <div className="absolute w-full h-full flex justify-center items-center bg-dark-gray mt-0 bg-opacity-90 ">
+               <div className="w-full flex flex-col bg-dark-gray top-1/3 h-40 p-8 justify-center items-center rounded-md">
+                  <p className="text-primary-bk w-full  flex justify-center items-center mb-2">Seu pedido foi enviado com sucesso!!</p>
+                  <CartButton onClick={onSucessOrder}>Voltar à Tela inicial</CartButton>
+               </div>
+            </div>
+         )}
+
+
       </div >
    )
 }
